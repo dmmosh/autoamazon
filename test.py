@@ -7,7 +7,6 @@ from time import time
 from time import sleep
 from typing import List, Literal
 from collections import Counter
-from fp.fp import FreeProxy # TESTINGG PURPOSES ONLY, use a good, paid proxy later
 import json
 import signal
 
@@ -16,6 +15,8 @@ from tor_proxy import tor_proxy
 from tor_proxy import onion
 import requests
 import atexit
+import psutil
+
 
 
 ports = [tor_proxy() for i in range(0,1)]
@@ -33,5 +34,8 @@ for port in ports:
     r = httpx.get("https://httpbin.org/ip", proxy=http_proxy)
     ip = json.loads(r.text)["origin"] # end node ip address - not the front node ip, pair them
     
-   
+current_process = psutil.Process()
+children = current_process.children(recursive=True)
+for child in children:
+    print('Child pid is {}'.format(child.pid))
 
