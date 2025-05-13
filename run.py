@@ -92,7 +92,7 @@ if __name__ == "__main__":
     
     proxies = []
     
-    for i in range(0,20):
+    for i in range(0,300):
         curr = ""
         
         # runs while theres an ip duplicate OR curr is empty (initial)
