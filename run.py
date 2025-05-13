@@ -148,11 +148,26 @@ if __name__ == "__main__":
         
         ip = proxy.ip + ":" + proxy.port # reassembles the ip
         
+        proxy_mounts = {
+            "http://": httpx.HTTPTransport(proxy=ip),
+            "https://": httpx.HTTPTransport(proxy=ip),
+        }
         
-        print(ip)
-        r = httpx.get("https://httpbin.io/ip", proxy={"http://"  + ip,
-                                                      "https://"  + ip})
-        print(r.text)
+        
+        with httpx.Client(
+            # enable HTTP2 support
+            http2=True,
+            # set headers for all requests
+            headers={"x-secret": "foo"},
+            # set cookies
+            cookies={"language": "en"},
+            # set proxxies
+            mounts=proxy_mounts
+
+        ) as session:
+            r = session.get("https://httpbin.dev/ip")
+            print(r.text)
+        #print(ip)
         
         
         fail = random.randint(0, 100) < _fail_rate
@@ -177,15 +192,3 @@ if __name__ == "__main__":
         
         
         
-
-with httpx.Client(
-    # enable HTTP2 support
-    http2=True,
-    # set headers for all requests
-    headers={"x-secret": "foo"},
-    # set cookies
-    cookies={"language": "en"}
-    # set proxxies
-    
-) as session:
-    session.get("https://httpbin.dev/get")
