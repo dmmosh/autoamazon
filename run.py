@@ -151,7 +151,7 @@ if __name__ == "__main__":
             return
     for i in range(0,100):
         mock_scrape()
-        time.sleep(0.001)
+        sleep(0.001)
 
     for proxy, count in _used.most_common():
         print(f"{proxy} was used   {count:>5} times")
