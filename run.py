@@ -7,7 +7,7 @@ from aglobal import *
 def valid_country(value:int): 
     if (value < 1): # base case
         return False
-    match gl.country_ip[value]:
+    match gl.country_ip[(value-1)%len(gl.country_ip)]:
         # most of the ip addresses will be american, however not exclusively
         # filtered out countries where products are restricted
         case "United States" | "Germany" | "United Kingdom" | "South Africa" | "Brazil" | "Ireland" | "Australia" | "Mexico" | "Italy" | "France":
