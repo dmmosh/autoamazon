@@ -19,7 +19,7 @@ import psutil
 
 
 
-ports = [tor_proxy() for i in range(0,1)]
+ports = [tor_proxy() for i in range(0,10)]
 
 
 #atexit.register(onion.Onion.cleanup)
