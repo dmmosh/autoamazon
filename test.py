@@ -22,9 +22,9 @@ import psutil
 ports = [tor_proxy() for i in range(0,1)]
 
 
-atexit.register(onion.Onion.cleanup)
-signal.signal(signal.SIGINT, lambda: onion.Onion.cleanup(self))  # Ctrl+C
-signal.signal(signal.SIGTERM, lambda: onion.Onion.cleanup) # Termination signal
+#atexit.register(onion.Onion.cleanup)
+#signal.signal(signal.SIGINT, lambda: onion.Onion.cleanup(self))  # Ctrl+C
+#signal.signal(signal.SIGTERM, lambda: onion.Onion.cleanup) # Termination signal
 
 for port in ports:
     http_proxy  = f"socks5h://127.0.0.1:{port}"
