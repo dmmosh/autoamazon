@@ -5,7 +5,7 @@ import json
 import time
 import os
 
-n = 20
+n = 1
 
 
 
