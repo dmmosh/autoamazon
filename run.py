@@ -175,7 +175,7 @@ if __name__ == "__main__":
             return
         
         
-    for i in range(0,100):
+    for i in range(0,10):
         mock_scrape()
         sleep(0.001)
 
