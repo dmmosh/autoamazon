@@ -116,7 +116,7 @@ if __name__ == "__main__":
     
     for i in range(0,gl.proxy_num):
         
-        proxy = FreeProxy(timeout=1,
+        proxy = FreeProxy(
                           country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
                           https=True,
                           url="https://www.amazon.com/"
