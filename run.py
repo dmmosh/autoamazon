@@ -5,6 +5,8 @@ import aglobal as gl # for modifying any global variables
 from aglobal import *
 
 def valid_country(value:int):
+    if (value<1):
+        return False
     match gl.country_ip[value-1]:
         # most of the ip addresses will be american, however not exclusively
         # filtered out countries where products are restricted
