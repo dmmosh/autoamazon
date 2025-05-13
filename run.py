@@ -10,19 +10,34 @@ def valid_country(value:int):
     match gl.country_ip[(value-1)%len(gl.country_ip)]:
         # most of the ip addresses will be american, however not exclusively
         # filtered out countries where products are restricted
-        case "United States" | "Germany" | "United Kingdom" | "South Africa" | "Brazil" | "Ireland" | "Australia" | "Mexico" | "Italy" | "France":
+        case "United States" | "Germany" | "United Kingdom" | "South Africa" | "Brazil" | "Ireland" | "Australia" | "Mexico" | "Italy" | "France" | "Sweden":
             return True
         case _:
             return False
 
-# checks if ip is VALID or not
-def valid_ip(ip:str):
-    try: 
-        ipaddress.ip_address(ip) # throws an exception if the ip isnt valid
-        return True # if no exception, return true
-    except ValueError: # catches a value error
-        return False
 
+
+# doesnt check for duplicates in the list, simply creates valid ips
+def ip_generator()-> str:
+    ip = ""
+    country = 0
+    while not (valid_country(country)): # checks the country ip with the valid country list
+        # filters out any restricted countries , that hide listings
+        country = random.randint(1,223)
+    
+    ip += str(country) + "." 
+    ip += str(random.randint(1,255)) + "." 
+    ip += str(random.randint(1,255)) + "." 
+    ip += str(random.randint(1,255))
+    
+    
+    # final check (most ips are good, just in case)
+    try:
+        ipaddress.ip_address(ip) # checks if ip is valid, if not throws a value exception
+        return ip
+    except ValueError:
+        return ip_generator()
+        
 
 class Proxy:
     """container for a proxy"""
@@ -97,20 +112,14 @@ if __name__ == "__main__":
         sys.exit()
     
     for i in range(0,gl.proxy_num):
-        curr = ""
         
-        # runs while theres an ip duplicate OR curr is empty (initial)
-        while(proxies.count(curr) >0 or curr == ""):
-            country = 0
-            while not (valid_country(country)):
-                country = random.randint(1,223)
-            
-            curr =str(country) + "." 
-            curr += str(random.randint(1,255)) + "." 
-            curr +=str(random.randint(1,255)) + "." 
-            curr +=str(random.randint(1,255))
+        ip = ip_generator()
         
-        proxies.append(Proxy(curr, "residential") if (i<i/2 -2) else Proxy(curr))    
+        # runs while theres an ip duplicate 
+        while(proxies.count(ip) >0):
+            ip = ip_generator()
+        
+        proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
 
@@ -124,6 +133,9 @@ if __name__ == "__main__":
             _fail_rate = 60
         else:
             _fail_rate = 20
+            
+            
+        
         if random.randint(0, 100) < _fail_rate:  # simulate some failure
             _failed[proxy.ip] += 1
             proxy.status = "dead"
