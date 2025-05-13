@@ -134,9 +134,10 @@ if __name__ == "__main__":
         else:
             _fail_rate = 20
             
-        
-        r = httpx.get("https://httpbin.io/ip")
-        print(r.text)
+        ip = "http://"+proxy.ip
+        print(ip)
+        #r = httpx.get("https://httpbin.io/ip", proxy="http://"+proxy.ip)
+        #print(r.text)
         
         fail = random.randint(0, 100) < _fail_rate
         
