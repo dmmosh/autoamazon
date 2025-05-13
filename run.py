@@ -46,7 +46,7 @@ class Proxy:
         
         self.ip, _, = ip[8:].split(":")
         #self.ip: str = ip
-         _, _, self.subnet, self.host = self.ip.split('.')
+        _, _, self.subnet, self.host = self.ip.split('.')
         self.status: Literal["alive", "unchecked", "dead"] = "unchecked"
         self.last_used: int = None
 
