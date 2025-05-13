@@ -121,7 +121,6 @@ if __name__ == "__main__":
                           url="https://www.amazon.com/"
                           ).get()
 
-        proxies.append(ip)
         #runs while theres an ip duplicate 
         
         while(proxies.count(ip) >0):
@@ -131,6 +130,7 @@ if __name__ == "__main__":
                           rand=True
                           ).get()
         
+        proxies.append(ip)
         print(ip)
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
