@@ -112,7 +112,7 @@ if __name__ == "__main__":
         sys.exit()
     
     
-    collector = proxyscrape.create_collector('proxy-collector', 'https')
+    collector = proxyscrape.create_collector('proxy-collector', 'http')
     #collector.apply_filter({'code':('us', 'uk', 'fr', 'ie', 'it', 'de')})
     #collector.refresh_proxies(force=True)
     
