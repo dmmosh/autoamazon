@@ -6,7 +6,7 @@ from typing import List, Literal
 from collections import Counter
 
 # tweak values
-proxy_num = 9
+proxy_num = 1000
 
 
 # dont touch
