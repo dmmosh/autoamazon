@@ -117,7 +117,7 @@ if __name__ == "__main__":
     for i in range(0,gl.proxy_num):
         
         proxy = FreeProxy(
-                          country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
+                          country_id=['US', 'BR'],
                           https=True
                           ).get()
 
