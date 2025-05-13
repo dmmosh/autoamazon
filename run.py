@@ -44,7 +44,7 @@ class Proxy:
 
     def __init__(self, ip, type_="datacenter") -> None:
         self.ip: str = ip
-        _, _, self.subnet, self.host = ip.split(":")[0].split('.')
+        _, _, self.subnet, self.host = ip[7:].split(":")[0].split('.')
         self.status: Literal["alive", "unchecked", "dead"] = "unchecked"
         self.last_used: int = None
 
