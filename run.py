@@ -44,7 +44,7 @@ class Proxy:
 
     def __init__(self, ip, type_="datacenter") -> None:
         
-        self.ip, _, = ip[8:].split(":")
+        self.ip, self.port, = ip[8:].split(":") # gets the ip with no port
         #self.ip: str = ip
         _, _, self.subnet, self.host = self.ip.split('.')
         self.status: Literal["alive", "unchecked", "dead"] = "unchecked"
@@ -152,6 +152,9 @@ if __name__ == "__main__":
         # r = httpx.get("https://httpbin.io/ip", proxy=ip)
         # print(r.text)
         
+        ip = "http://"  + proxy.ip + ":" + proxy.port
+        print(ip)
+        
         fail = random.randint(0, 100) < _fail_rate
         
         if fail:  # simulate some failure
@@ -162,6 +165,8 @@ if __name__ == "__main__":
             proxy.status = "alive"
             #print(proxy.ip)
             return
+        
+        
     for i in range(0,100):
         mock_scrape()
         sleep(0.001)
