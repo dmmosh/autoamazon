@@ -118,14 +118,13 @@ if __name__ == "__main__":
     
     for i in range(0,gl.proxy_num):
         
-        ip = collector.get_proxy().__str__
+        ip = collector.get_proxy()
         
         # runs while theres an ip duplicate 
         # while(proxies.count(ip) >0):
         #     ip = ip_generator()
         
         print(ip)
-        
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
