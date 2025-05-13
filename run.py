@@ -94,6 +94,7 @@ if __name__ == "__main__":
     
     for i in range(0,300):
         curr = ""
+        country = 0
         
         # runs while theres an ip duplicate OR curr is empty (initial)
         while(proxies.count(curr) >0 or curr == ""):
