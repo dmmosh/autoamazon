@@ -129,11 +129,11 @@ if __name__ == "__main__":
                           rand=True
                           ).get())
         
-        proxies.append(Proxy(ip))
+        proxies.append(ip)
         print(ip)
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
-    rotator = Rotator(proxies)
+    rotator = Rotator([Proxy(i) for i in proxies])
 
     # let's mock some runs:
     _used = Counter()
