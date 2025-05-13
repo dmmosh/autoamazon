@@ -7,7 +7,7 @@ from aglobal import *
 def valid_country(value:int): 
     if (value < 1): # base case
         return False
-    print(value)
+    print(value, len(gl.country_ip))
     return True
     # match gl.country_ip[value-1]:
     #     # most of the ip addresses will be american, however not exclusively
