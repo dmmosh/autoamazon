@@ -1,42 +1,45 @@
-
-import random
-import ipaddress
-import httpx
 import requests
-from time import time
-from time import sleep
-from typing import List, Literal
-from collections import Counter
+import multiprocessing
+from multiprocessing.pool import Pool
 import json
-import signal
-
-# tor_proxy_example.py
-from tor_proxy import tor_proxy
-from tor_proxy import onion
-import requests
-import atexit
-import psutil
+import time
+import os
 
 
+  
+url = "https://scraper-api.decodo.com/v2/scrape"
+  
+payload = {
+      "url": "https://httpbin.org/ip",
+      "geo": "United States"
+}
+  
+headers = {
+    "accept": "application/json",
+    "content-type": "application/json",
+    "authorization": "Basic " + os.getenv('AUTH_DECODO')
+}
 
-ports = [tor_proxy() for i in range(0,10)]
+
+def get_ip(i):
+    response = requests.post(url, json=payload, headers=headers)
+    r = json.loads(str(json.loads(response.text)['results'][0]['content']))['origin']
+    print(str(i) + ' ip of sender: ' + r)
 
 
-#atexit.register(onion.Onion.cleanup)
-#signal.signal(signal.SIGINT, lambda: onion.Onion.cleanup(self))  # Ctrl+C
-#signal.signal(signal.SIGTERM, lambda: onion.Onion.cleanup) # Termination signal
+n = 20
 
-for port in ports:
-    http_proxy  = f"socks5h://127.0.0.1:{port}"
-    print(http_proxy)
-    #https_proxy = f"socks5h://127.0.0.1:{port}"
+print('httpbin test (multiprocessing pool)')
 
-    r = httpx.get("https://httpbin.org/ip", proxy=http_proxy)
-    ip = json.loads(r.text)["origin"] # end node ip address - not the front node ip, pair them
-    print(ip)
-    
-current_process = psutil.Process()
-children = current_process.children(recursive=True)
-for child in children:
-    print('Child pid is {}'.format(child.pid))
+with Pool() as pool:
+        
+            # issue tasks into the process pool
+        r = pool.map_async(get_ip, range(n))
 
+        
+        # shutdown the process pool
+        pool.close()
+        # wait for tasks to complete
+        pool.join()
+        # report all tasks done
+        print('All tasks are done', flush=True)
