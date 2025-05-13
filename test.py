@@ -7,11 +7,15 @@ import os
 
 
   
+import requests
+  
 url = "https://scraper-api.decodo.com/v2/scrape"
   
 payload = {
-      "url": "https://httpbin.org/ip",
-      "geo": "United States"
+      "target": "amazon_product",
+      "query": "B09H74FXNW",
+      "parse": True,
+      "autoselect_variant": False
 }
   
 headers = {
@@ -19,6 +23,10 @@ headers = {
     "content-type": "application/json",
     "authorization": "Basic " + os.getenv('AUTH_DECODO')
 }
+  
+response = requests.post(url, json=payload, headers=headers)
+  
+print(response.text)
 
 
 def get_ip(i):
@@ -27,19 +35,19 @@ def get_ip(i):
     print(str(i) + ' ip of sender: ' + r)
 
 
-n = 20
+# n = 20
 
-print('httpbin test (multiprocessing pool)')
+# print('httpbin test (multiprocessing pool)')
 
-with Pool() as pool:
+# with Pool() as pool:
         
-            # issue tasks into the process pool
-        r = pool.map_async(get_ip, range(n))
+#             # issue tasks into the process pool
+#         r = pool.map_async(get_ip, range(n))
 
         
-        # shutdown the process pool
-        pool.close()
-        # wait for tasks to complete
-        pool.join()
-        # report all tasks done
-        print('All tasks are done', flush=True)
+#         # shutdown the process pool
+#         pool.close()
+#         # wait for tasks to complete
+#         pool.join()
+#         # report all tasks done
+#         print('All tasks are done', flush=True)
