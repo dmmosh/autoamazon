@@ -134,13 +134,22 @@ if __name__ == "__main__":
         else:
             _fail_rate = 20
             
-            
+        proxies = {
+            "http://": "http://" + proxy.ip,
+            "https://": "http://"+ proxy.ip 
+        }
         
-        if random.randint(0, 100) < _fail_rate:  # simulate some failure
+        r = httpx.get("https://httpbin.io/ip", proxies=proxies)
+ 
+        print(r.text)
+        
+        fail = random.randint(0, 100) < _fail_rate
+        
+        if fail:  # simulate some failure
             _failed[proxy.ip] += 1
             proxy.status = "dead"
-            mock_scrape()
-        else:
+            mock_scrape() # tries again with new ip
+        else: # SUCCESS
             proxy.status = "alive"
             #print(proxy.ip)
             return
