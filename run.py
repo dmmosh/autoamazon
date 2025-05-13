@@ -116,16 +116,22 @@ if __name__ == "__main__":
     
     for i in range(0,gl.proxy_num):
         
-        proxy = FreeProxy(timeout=0.5,
+        ip = FreeProxy(
                           country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
                           url="https://www.amazon.com/"
                           ).get()
 
-        # runs while theres an ip duplicate 
-        # while(proxies.count(ip) >0):
-        #     ip = ip_generator()
+        #runs while theres an ip duplicate 
         
-        print(proxy)
+        retry = 3
+        while(proxies.count(ip) >0):
+            ip = FreeProxy(
+                          country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
+                          url="https://www.amazon.com/",
+                          rand=True
+                          ).get()
+        
+        print(ip)
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
