@@ -33,6 +33,7 @@ for port in ports:
 
     r = httpx.get("https://httpbin.org/ip", proxy=http_proxy)
     ip = json.loads(r.text)["origin"] # end node ip address - not the front node ip, pair them
+    print(ip)
     
 current_process = psutil.Process()
 children = current_process.children(recursive=True)
