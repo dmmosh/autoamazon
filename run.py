@@ -92,7 +92,7 @@ if __name__ == "__main__":
     
     proxies = []
     
-    for i in range(0,300):
+    for i in range(0,233):
         curr = ""
         country = 0
         
