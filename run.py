@@ -112,20 +112,28 @@ if __name__ == "__main__":
         sys.exit()
     
     
-    collector = proxyscrape.create_collector('proxy-collector', 'http')
-    #collector.apply_filter({'code':('us', 'uk', 'fr', 'ie', 'it', 'de')})
-    #collector.refresh_proxies(force=True)
+    collector = proxyscrape.create_collector('my-collector', 'http')
+
+    # Retrieve any http proxy
+    proxy = collector.get_proxy()
     
-    for i in range(0,gl.proxy_num):
+    # Retrieve only 'us' proxies
+    proxy = collector.get_proxy({'code': 'us'})
+    
+    # Retrieve only anonymous 'uk' or 'us' proxies
+    proxy = collector.get_proxy({'code': ('us', 'uk'), 'anonymous': True})
+    
+    print(proxy)
+    # for i in range(0,gl.proxy_num):
         
-        ip = collector.get_proxy()
+    #     ip = collector.get_proxy()
         
-        # runs while theres an ip duplicate 
-        # while(proxies.count(ip) >0):
-        #     ip = ip_generator()
+    #     # runs while theres an ip duplicate 
+    #     # while(proxies.count(ip) >0):
+    #     #     ip = ip_generator()
         
-        print(ip)
-        #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
+    #     print(ip)
+    #     #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
 
