@@ -123,7 +123,6 @@ if __name__ == "__main__":
 
         #runs while theres an ip duplicate 
         
-        retry = 3
         while(proxies.count(ip) >0):
             ip = FreeProxy(
                           country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
