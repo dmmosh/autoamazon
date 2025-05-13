@@ -92,7 +92,7 @@ if __name__ == "__main__":
     
     proxies = []
     
-    for i in range(0,gl.proxy_num):
+    for i in range(0,20):
         curr = ""
         
         # runs while theres an ip duplicate OR curr is empty (initial)
