@@ -159,7 +159,7 @@ if __name__ == "__main__":
             proxy=ip
             # set proxxies
         ) as session:
-            r = session.get("https://httpbin.dev/ip")
+            r = session.get("https://httpbin.dev/ip", timeout=None)
             print(r.text)
         
         
