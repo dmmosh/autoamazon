@@ -134,12 +134,8 @@ if __name__ == "__main__":
         else:
             _fail_rate = 20
             
-        proxies = {
-            "http://": "http://" + proxy.ip,
-            "https://": "http://"+ proxy.ip 
-        }
         
-        r = httpx.get("https://httpbin.io/ip", proxies=proxies)
+        r = httpx.get("https://httpbin.io/ip", proxy="http://"+ proxy.ip )
  
         print(r.text)
         
