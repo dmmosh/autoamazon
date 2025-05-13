@@ -78,23 +78,26 @@ class Rotator:
 
 
 if __name__ == "__main__":
-    proxies = [
-        # these will be used more often
-        Proxy("xx.xx.422.1", "residential"),
-        Proxy("xx.xx.812.2", "residential"),
-        Proxy("xx.xx.221.3", "residential"),
-        # these will be used less often
-        Proxy("xx.xx.422.1"),
-        Proxy("xx.xx.152.2"),
-        Proxy("xx.xx.043.1"),
-        Proxy("xx.xx.332.2"),
-    ]
+    # proxies = [
+    #     # these will be used more often
+    #     Proxy("xx.xx.422.1", "residential"),
+    #     Proxy("xx.xx.812.2", "residential"),
+    #     Proxy("xx.xx.221.3", "residential"),
+    #     # these will be used less often
+    #     Proxy("xx.xx.422.1"),
+    #     Proxy("xx.xx.152.2"),
+    #     Proxy("xx.xx.043.1"),
+    #     Proxy("xx.xx.332.2"),
+    # ]
     
     proxies = []
     
-    for i in range(0,234):
+    if(gl.proxy_num <= 4):
+        print("MINIMUM PROXYY NUMBER IS 4")
+        sys.exit()
+    
+    for i in range(0,gl.proxy_num):
         curr = ""
-        country = 0
         
         # runs while theres an ip duplicate OR curr is empty (initial)
         while(proxies.count(curr) >0 or curr == ""):
