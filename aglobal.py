@@ -6,7 +6,7 @@ from time import time
 from time import sleep
 from typing import List, Literal
 from collections import Counter
-import proxyscrape # TESTINGG PURPOSES ONLY, use a good, paid proxy later
+from fp.fp import FreeProxy # TESTINGG PURPOSES ONLY, use a good, paid proxy later
 
 
 # tweak values

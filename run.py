@@ -112,21 +112,22 @@ if __name__ == "__main__":
         sys.exit()
     
     
-    collector = proxyscrape.create_collector('default', 'http')  # Create a collector for http resources
-    proxy = collector.get_proxy({'country': 'united states'})  # Retrieve a united states proxy
     
     
-    print(proxy)
-    # for i in range(0,gl.proxy_num):
+    for i in range(0,gl.proxy_num):
         
-    #     ip = collector.get_proxy()
+        proxy = FreeProxy(timeout=1,
+                          country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
+                          https=True,
+                          url="https://www.amazon.com/"
+                          ).get()
+
+        # runs while theres an ip duplicate 
+        # while(proxies.count(ip) >0):
+        #     ip = ip_generator()
         
-    #     # runs while theres an ip duplicate 
-    #     # while(proxies.count(ip) >0):
-    #     #     ip = ip_generator()
-        
-    #     print(ip)
-    #     #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
+        print(proxy)
+        #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
 
