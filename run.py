@@ -123,12 +123,7 @@ if __name__ == "__main__":
 
         #runs while theres an ip duplicate 
         
-        while(proxies.count(ip) >0):
-            ip = FreeProxy(
-                          country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
-                          url="https://www.amazon.com/",
-                          rand=True
-                          ).get()
+        
         
         print(ip)
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
