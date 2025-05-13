@@ -7,16 +7,13 @@ from aglobal import *
 def valid_country(value:int): 
     if (value < 1): # base case
         return False
-    if(value > len(gl.country_ip)):
-        print("OVERFLOW")
-    return True
-    # match gl.country_ip[value-1]:
-    #     # most of the ip addresses will be american, however not exclusively
-    #     # filtered out countries where products are restricted
-    #     case "United States" | "Germany" | "United Kingdom" | "South Africa" | "Brazil" | "Ireland" | "Australia" | "Mexico" | "Italy" | "France":
-    #         return True
-    #     case _:
-    #         return False
+    match gl.country_ip[value-1]:
+        # most of the ip addresses will be american, however not exclusively
+        # filtered out countries where products are restricted
+        case "United States" | "Germany" | "United Kingdom" | "South Africa" | "Brazil" | "Ireland" | "Australia" | "Mexico" | "Italy" | "France":
+            return True
+        case _:
+            return False
 
 # checks if ip is VALID or not
 def valid_ip(ip:str):
