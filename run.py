@@ -135,7 +135,7 @@ if __name__ == "__main__":
             _fail_rate = 20
         
         
-        ip = "49.70.172.243:2324"
+        ip = "http://49.70.172.243:2324"
         print(ip)
         r = httpx.get("https://httpbin.io/ip", proxy=ip)
         print(r.text)
