@@ -150,8 +150,7 @@ if __name__ == "__main__":
         
         
         print(ip)
-        r = requests.get("https://httpbin.io/ip", proxies={"http"  : "http://"  + ip,
-                                                           "https" : "https://"  + ip})
+        r = httpx.get("https://httpbin.io/ip", proxy=ip)
         print(r.text)
         
         
