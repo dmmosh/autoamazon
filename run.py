@@ -44,7 +44,6 @@ class Proxy:
 
     def __init__(self, ip, type_="datacenter") -> None:
         self.ip: str = ip
-        self.type: Literal["datacenter", "residential"] = type_
         _, _, self.subnet, self.host = ip.split(":")[0].split('.')
         self.status: Literal["alive", "unchecked", "dead"] = "unchecked"
         self.last_used: int = None
@@ -70,8 +69,6 @@ class Rotator:
         if proxy.status == "dead":
             weight -= 500
         if proxy.status == "unchecked":
-            weight += 250
-        if proxy.type == "residential":
             weight += 250
         if proxy.last_used: 
             _seconds_since_last_use = time() - proxy.last_used
