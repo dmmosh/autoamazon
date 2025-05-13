@@ -149,7 +149,7 @@ if __name__ == "__main__":
         ip = "http://"  + proxy.ip + ":" + proxy.port # reassembles the ip
         
         print(ip)
-        r = requests.get("https://httpbin.io/ip")
+        r = requests.get("https://httpbin.io/ip", proxy=ip)
         print(r.text)
         
         
