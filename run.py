@@ -98,12 +98,11 @@ if __name__ == "__main__":
         
         # runs while theres an ip duplicate OR curr is empty (initial)
         while(proxies.count(curr) >0 or curr == ""):
-            curr = ""
             country = 0
             while not (valid_country(country)):
                 country = random.randint(1,223)
             
-            curr +=str(country) + "." 
+            curr =str(country) + "." 
             curr += str(random.randint(1,255)) + "." 
             curr +=str(random.randint(1,255)) + "." 
             curr +=str(random.randint(1,255))
