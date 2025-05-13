@@ -6,9 +6,11 @@ from time import time
 from time import sleep
 from typing import List, Literal
 from collections import Counter
+import proxyscrape # TESTINGG PURPOSES ONLY, use a good, paid proxy later
+
 
 # tweak values
-proxy_num = 20
+proxy_num = 5
 
 
 # dont touch

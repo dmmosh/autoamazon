@@ -111,13 +111,20 @@ if __name__ == "__main__":
         print("MINIMUM PROXYY NUMBER IS 4")
         sys.exit()
     
+    
+    collector = proxyscrape.create_collector('proxy-collector', 'https')
+    collector.apply_filter({'code':('us', 'uk', 'fr', 'ie', 'it', 'de')})
+    collector.refresh_proxies(force=True)
+    
     for i in range(0,gl.proxy_num):
         
-        ip = ip_generator()
+        ip = collector.get_proxy().__str__
         
         # runs while theres an ip duplicate 
-        while(proxies.count(ip) >0):
-            ip = ip_generator()
+        # while(proxies.count(ip) >0):
+        #     ip = ip_generator()
+        
+        print(ip)
         
         proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
