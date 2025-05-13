@@ -127,7 +127,7 @@ if __name__ == "__main__":
                           rand=True
                           ).get())
         
-        proxies.append(ip)
+        proxies.append(Proxy(ip))
         print(ip)
         #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
