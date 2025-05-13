@@ -165,7 +165,7 @@ if __name__ == "__main__":
         #     r = session.get("https://httpbin.dev/ip")
         #     print(r.text)
         #print(ip)
-        r = httpx.get("https://httpbin.org/ip", proxy="http://34.221.119.219:999")
+        r = httpx.get("https://httpbin.org/ip", proxy="http://40.76.69.94:8080")
         print(r.text)
         
         fail = random.randint(0, 100) < _fail_rate
