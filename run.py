@@ -4,7 +4,9 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 import aglobal as gl # for modifying any global variables 
 from aglobal import *
 
-def valid_country(value:int):
+def valid_country(value:int): 
+    if (value < 1): # base case
+        return False
     print(value)
     return True
     # match gl.country_ip[value-1]:
