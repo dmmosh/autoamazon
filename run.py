@@ -168,7 +168,7 @@ if __name__ == "__main__":
         #     r = session.get("https://httpbin.dev/ip")
         #     print(r.text)
         #print(ip)
-        r = httpx.get("https://httpbin.dev/ip")
+        r = httpx.get("https://httpbin.org/ip")
         print(r.text)
         
         fail = random.randint(0, 100) < _fail_rate
