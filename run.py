@@ -117,11 +117,6 @@ if __name__ == "__main__":
     # Retrieve any http proxy
     proxy = collector.get_proxy()
     
-    # Retrieve only 'us' proxies
-    proxy = collector.get_proxy({'code': 'us'})
-    
-    # Retrieve only anonymous 'uk' or 'us' proxies
-    proxy = collector.get_proxy({'code': ('us', 'uk'), 'anonymous': True})
     
     print(proxy)
     # for i in range(0,gl.proxy_num):
