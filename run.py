@@ -148,19 +148,9 @@ if __name__ == "__main__":
         
         ip = "http://"  + proxy.ip + ":" + proxy.port # reassembles the ip
         
-        
-        with httpx.Client(
-            # enable HTTP2 support
-            http2=True,
-            # set headers for all requests
-            headers={"x-secret": "foo"},
-            # set cookies
-            cookies={"language": "en"},
-            proxy=ip
-            # set proxxies
-        ) as session:
-            r = session.get("https://httpbin.dev/ip", timeout=None)
-            print(r.text)
+        print(ip)
+        r = requests.get("https://httpbin.io/ip")
+        print(r.text)
         
         
         fail = random.randint(0, 100) < _fail_rate
@@ -175,7 +165,7 @@ if __name__ == "__main__":
             return
         
         
-    for i in range(0,10):
+    for i in range(0,100):
         mock_scrape()
         sleep(0.001)
 
@@ -185,3 +175,15 @@ if __name__ == "__main__":
         
         
         
+
+with httpx.Client(
+    # enable HTTP2 support
+    http2=True,
+    # set headers for all requests
+    headers={"x-secret": "foo"},
+    # set cookies
+    cookies={"language": "en"}
+    # set proxxies
+    
+) as session:
+    session.get("https://httpbin.dev/get")

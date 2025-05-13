@@ -2,6 +2,7 @@
 import random
 import ipaddress
 import httpx
+import requests
 from time import time
 from time import sleep
 from typing import List, Literal
