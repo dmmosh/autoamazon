@@ -126,7 +126,7 @@ if __name__ == "__main__":
         
         print(ip)
         
-        proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
+        #proxies.append(Proxy(ip, "residential") if (i<i/2 -2) else Proxy(ip))    
         
     rotator = Rotator(proxies)
 
