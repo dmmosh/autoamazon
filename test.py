@@ -5,17 +5,16 @@ import json
 import time
 import os
 
-
-  
 import requests
+
+# "authorization": "Basic " + os.getenv('AUTH_DECODO')
   
 url = "https://scraper-api.decodo.com/v2/scrape"
   
 payload = {
-      "target": "amazon_product",
-      "query": "B09H74FXNW",
-      "parse": True,
-      "autoselect_variant": False
+      "target": "amazon",
+      "url": "https://www.amazon.com/dp/B09H74FXNW",
+      "parse": True
 }
   
 headers = {
