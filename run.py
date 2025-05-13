@@ -146,13 +146,12 @@ if __name__ == "__main__":
         else:
             _fail_rate = 20
         
-        ip = "http://"  + proxy.ip + ":" + proxy.port # reassembles the ip
+        ip = proxy.ip + ":" + proxy.port # reassembles the ip
         
         
         print(ip)
-        r = requests.get("https://httpbin.io/ip", proxies={"http"  : ip,
-                                                           "https" : ip,
-                                                           "ftp"   : ip})
+        r = requests.get("https://httpbin.io/ip", proxies={"http"  : "http://"  + ip,
+                                                           "https" : "https://"  + ip})
         print(r.text)
         
         
