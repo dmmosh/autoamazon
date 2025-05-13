@@ -149,8 +149,8 @@ if __name__ == "__main__":
         ip = proxy.ip + ":" + proxy.port # reassembles the ip
         
         proxy_mounts = {
-            "http://": httpx.HTTPTransport(proxy=ip),
-            "https://": httpx.HTTPTransport(proxy=ip),
+            "http://": httpx.HTTPTransport(proxy="http://"+ip),
+            "https://": httpx.HTTPTransport(proxy="http://"+ip),
         }
         
         
