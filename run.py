@@ -150,7 +150,7 @@ if __name__ == "__main__":
         
         
         print(ip)
-        r = httpx.get("https://httpbin.io/ip", proxy=ip)
+        r = httpx.get("https://httpbin.io/ip", proxy="http://"  + ip)
         print(r.text)
         
         
