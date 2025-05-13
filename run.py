@@ -116,11 +116,7 @@ if __name__ == "__main__":
     
     for i in range(0,gl.proxy_num):
         
-        proxy = FreeProxy(
-                          country_id=['US', 'BR', 'GB', 'FR', 'IT', 'CA','IE'],
-                          https=True,
-                          url="https://www.amazon.com/"
-                          ).get()
+        proxy = FreeProxy().get()
 
         # runs while theres an ip duplicate 
         # while(proxies.count(ip) >0):
