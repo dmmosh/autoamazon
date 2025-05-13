@@ -162,7 +162,7 @@ if __name__ == "__main__":
             proxy.status = "alive"
             #print(proxy.ip)
             return
-    for i in range(0,5):
+    for i in range(0,100):
         mock_scrape()
         sleep(0.001)
 
