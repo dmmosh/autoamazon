@@ -113,7 +113,7 @@ if __name__ == "__main__":
     
     
     collector = proxyscrape.create_collector('proxy-collector', 'https')
-    collector.apply_filter({'code':('us', 'uk', 'fr', 'ie', 'it', 'de')})
+    #collector.apply_filter({'code':('us', 'uk', 'fr', 'ie', 'it', 'de')})
     collector.refresh_proxies(force=True)
     
     for i in range(0,gl.proxy_num):
