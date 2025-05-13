@@ -136,7 +136,7 @@ if __name__ == "__main__":
             
         
         r = httpx.get("https://httpbin.io/ip")
-        print(r.text())
+        print(r.text)
         
         fail = random.randint(0, 100) < _fail_rate
         
