@@ -148,8 +148,11 @@ if __name__ == "__main__":
         
         ip = "http://"  + proxy.ip + ":" + proxy.port # reassembles the ip
         
+        
         print(ip)
-        r = requests.get("https://httpbin.io/ip", proxy=ip)
+        r = requests.get("https://httpbin.io/ip", proxies={"http"  : ip,
+                                                           "https" : ip,
+                                                           "ftp"   : ip})
         print(r.text)
         
         
