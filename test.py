@@ -28,5 +28,7 @@ headers = {
 }
   
 response = requests.post(url, json=payload, headers=headers, auth=(username,password))
-  
-print(json.dumps(response.text, sort_keys=True, indent=2, separators=(',', ': ')))
+
+
+if 'seller-contact-phone' in response.text:
+    print('JACKPOT')
