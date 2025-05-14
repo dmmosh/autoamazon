@@ -36,7 +36,7 @@ def run(link):
     payload = {
           "target": "amazon_pricing",
           "query": product_id(link=link),
-          "page_from": "3",
+          "page_from": "1",
           "parse": True # true for json, false for html
     }
     
