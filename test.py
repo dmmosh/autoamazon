@@ -29,4 +29,4 @@ headers = {
   
 response = requests.post(url, json=payload, headers=headers, auth=(username,password))
   
-print(response.text)
+print(json.dumps(response.text, sort_keys=True, indent=2, separators=(',', ': ')))
