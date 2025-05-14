@@ -71,7 +71,8 @@ def run(link):
             ):
             listings.append((listing['seller'], listing))
             
-        
+    
+    print(listings)
     listings = list(dict(listings).values())
     
     # iterates through all listings that arent the first
