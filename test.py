@@ -32,52 +32,69 @@ link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 
 
 def run(link):
-  
-    payload = {
-          "target": "amazon_pricing",
-          "query": product_id(link=link),
-          "page_from": "2",
-          "parse": True # true for json, false for html
-    }
     
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json"
-    }
     
-    response = requests.post(url, json=payload, headers=headers, auth=(username,password))
+    listings=[]
+    duped_listings = [] # placeholder for the pool of duplicate listings
+    
+    original_listing = ''
+    
+    i = 1
+    while(True):
+        payload = {
+              "target": "amazon_pricing",
+              "query": product_id(link=link),
+              "page_from": str(i),
+              "parse": True # true for json, false for html
+        }
 
-    if (response.status_code != 200):
-        print('GET REQUEST FAILED, TRYING AGAIN')
-        response = requests.post(url, json=payload, auth=(username,password))
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json"
+        }
 
-    info = json.loads(response.text)['results'][0]['content']['results']
-    title = info['title']
-    if (len(info['pricing']) <= 1):
-        print(title, link, 'NO OTHER SELLERS FOUND', sep='\t')
-        return
-    
-    original_listing = info['pricing'][0]
-    #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
-    #print(info['pricing'])
-    
-    listings = []
-    for listing in info['pricing'][1:]:
-        if ( 
-            listing['seller'] != original_listing['seller'] and
-            listing['seller'] != 'Amazon Resale' and 
-            listing['seller'] !='Amazon.com' and
-            not any(i.isdigit() for i in listing['seller'])
-            ):
-            listings.append((listing['seller'], listing))
+        response = requests.post(url, json=payload, headers=headers, auth=(username,password))
+
+        if (response.status_code != 200):
+            print('GET REQUEST FAILED, TRYING AGAIN')
+            response = requests.post(url, json=payload, auth=(username,password))
+
+        info = json.loads(response.text)['results'][0]['content']['results']
+        title = info['title']
+        
+        orig_len = len(info['pricing'])
+        if (orig_len <= 1):  # no elements
+            break
+        
+
+        if(i==1): # first page
+            original_listing = info['pricing'][0]
+            info['pricing'].pop(0)
             
-    
-    #print(listings)
-    listings = list(dict(listings).values())
-    
-    # iterates through all listings that arent the first
-    # first listing is the original seller's
-    
+        #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
+        #print(info['pricing'])
+
+        for listing in info['pricing']:
+            if ( 
+                listing['seller'] != original_listing['seller'] and
+                listing['seller'] != 'Amazon Resale' and 
+                listing['seller'] !='Amazon.com' and
+                not any(i.isdigit() for i in listing['seller'])
+                ):
+                duped_listings.append((listing['seller'], listing))
+
+
+        #print(listings)
+        old_len = len(listings)
+        listings.append(list(dict(duped_listings).values()))
+        if(orig_len < 10 or len(listings)-old_len == 0):
+            break
+        
+
+        # iterates through all listings that arent the first
+        # first listing is the original seller's
+        i+=1
+
     print(title, link, [listing['seller'] for listing in listings])
 
 run(link)
