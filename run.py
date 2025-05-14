@@ -53,6 +53,7 @@ def run(link:str):
     listings_duped={} # pairs soon to be dicts (unduplicated)
     
     pool = Pool(processes=5)
+    pool_res = []
     # flops between list of tuples and dicts
     
     i = 1
@@ -111,9 +112,14 @@ def run(link:str):
             break
         
         
-        for seller in list(listings_duped.keys())[duped_len:]:
-            listings_duped[seller]['phone number'] = phone_num('https://www.amazon.com' + listings_duped[seller]['seller_link'])
-            #print(seller ,' :   ', listings_duped[seller]['seller_link'])
+        #pool_res.append(pool.map_async(phone_num, list(listings_duped.values())[duped_len:]:)
+        
+        
+        print([listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
+        
+        # for seller in list(listings_duped.values())[duped_len:]:
+        #     listings_duped[seller]['phone number'] = phone_num('https://www.amazon.com' + listings_duped[seller]['seller_link'])
+        #     #print(seller ,' :   ', listings_duped[seller]['seller_link'])
         print()
         
         # for listing in listings_duped.values():
