@@ -52,7 +52,7 @@ def run(link:str):
     listings = []
     listings_duped={} # pairs soon to be dicts (unduplicated)
     
-    pool = Pool(processes=10)
+    pool = Pool(processes=5)
     # flops between list of tuples and dicts
     
     i = 1
@@ -110,8 +110,9 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        listings_curr = list(listings_duped.values())[duped_len:]
+        listings_curr = list(listings_duped[duped_len:].values())
         print('NEWLY ADDED ITEMS: ', [curr['seller'] for curr in listings_curr])
+        
         
         # for listing in listings_duped.values():
         #     if 'phone number' not in listing:
