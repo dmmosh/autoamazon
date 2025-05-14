@@ -112,10 +112,10 @@ def run(link:str):
             break
         
         
-        #pool_res.append(pool.map_async(phone_num, list(listings_duped.values())[duped_len:]:)
+        pool_res.append(pool.map_async(phone_num, ['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]]))
         
         
-        print([listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
+        #print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
         
         # for seller in list(listings_duped.values())[duped_len:]:
         #     listings_duped[seller]['phone number'] = phone_num('https://www.amazon.com' + listings_duped[seller]['seller_link'])
@@ -140,6 +140,8 @@ def run(link:str):
     
     listings = list(dict(listings_duped).values()) # gets the values from the dicts
     
+    
+    
     if(len(listings) == 0):
         print(title, link, 'NO SELLERS FOUND', sep='\t')
     else:
@@ -147,8 +149,14 @@ def run(link:str):
         #listings = list(dict(listings_new).values())
         # ACQUIRES ALL THE ELEMENTS
         # can start this process (phone # extraction) in the loop in the background
-        print(title, link, [[listing['seller'],listing['phone number']]  for listing in listings], sep='\t')
+        print(title, link, [listing['seller']  for listing in listings], sep='\t')
         #print(title, link, listings, sep='\t')
+        
+        for batch in pool_res:
+            for value in batch.get():
+                print(value)
+        
+        print(pool_res)
     
     
     
