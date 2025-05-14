@@ -33,4 +33,4 @@ response = requests.post(url, json=payload, headers=headers, auth=(username,pass
 
 index = response.text.find('seller-contact-phone')
 if(index>-1): # if seller phone number DOES exist
-    print(response.text[index+36:index+51])
+    print(response.text[index+35:index+51])
