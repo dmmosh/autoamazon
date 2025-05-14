@@ -24,25 +24,28 @@ def others_link(link:str)->str: # gets the unique amazon product id from the lin
 # testing purposes
 link = 'https://www.amazon.com/dp/B09TX13F29'
 
-  
 url = "https://scraper-api.decodo.com/v2/scrape"
+
   
 payload = {
-      "target": "amazon",
-      "url": 'https://www.amazon.com/gp/offer-listing/B09TX13F29/ref=dp_olp_NEW_mbc?ie=UTF8&condition=NEW',
+      "target": "amazon_pricing",
+      "query": "B09TX13F29",
+      "page_from": "1",
       "parse": True
 }
   
 headers = {
     "accept": "application/json",
     "content-type": "application/json",
-    "authorization": "Basic " + os.getenv('AUTH_DECODO')
+    "authorization": "Basic "+ os.getenv('AUTH_DECODO')
 }
   
 response = requests.post(url, json=payload, headers=headers)
   
 print(response.text)
-print(others_link(link=link))
+
+
+#print(others_link(link=link))
 
 # def get_ip(i):
 #     response = requests.post(url, json=payload, headers=headers)
