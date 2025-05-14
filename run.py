@@ -139,7 +139,8 @@ def run(link:str):
     
     listings = list(dict(listings_duped).values()) # gets the values from the dicts
     
-    
+    pool.close()
+    pool.join()
     
     if(len(listings) == 0):
         print(title, link, 'NO SELLERS FOUND', sep='\t')
