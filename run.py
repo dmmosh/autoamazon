@@ -111,7 +111,7 @@ def run(link:str):
             break
         
         listings_curr = list(listings_duped.values())
-        print('NEWLY ADDED ITEMS: ', [curr['seller_link'] for curr in listings_curr])
+        print('NEWLY ADDED ITEMS: ', [curr['seller'] for curr in listings_curr])
         
         # for listing in listings_duped.values():
         #     if 'phone number' not in listing:
