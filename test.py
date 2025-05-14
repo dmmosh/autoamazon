@@ -64,6 +64,7 @@ def run(link):
     listings = []
     for listing in info['pricing'][1:]:
         if ( 
+            listing['seller'] != original_listing['seller'] and
             listing['seller'] != 'Amazon Resale' and 
             listing['seller'] !='Amazon.com' and
             not any(i.isdigit() for i in listing['seller'])
