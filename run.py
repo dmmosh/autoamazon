@@ -85,6 +85,7 @@ def run(link:str):
             fails+=1
         if(fails==3):
             print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
+            return {}
 
         info = json.loads(response.text)['results'][0]['content']['results']
         
@@ -122,7 +123,6 @@ def run(link:str):
             break
         
         #print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
-        out['api_calls']+=(len(listings_duped)-duped_len)
         pool_res.append(pool.map_async(phone_num, ['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]]))
         
         
@@ -178,6 +178,7 @@ def run(link:str):
                     #out.append((sellers[i], number))
                     #success+=1
                 i+=1
+        out['api_calls']+=i
         if(len(out['contacts'])==0): # if no phone numbers found
             print('NO PHONE #S FOUND', 'API CALLS:', out['api_calls'], sep='\t')
             return {}
