@@ -45,7 +45,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
     
 
 # testing purposes
-link='https://www.amazon.com/DP/B0CL2B5677?ref'
+link='https://www.amazon.com/dp/B081RJ8DW1'
 def run(link:str):
     
     listings = []
