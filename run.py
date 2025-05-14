@@ -113,6 +113,7 @@ def run(link:str):
         
         for seller in list(listings_duped.keys())[duped_len:]:
             print(seller ,' :   ', listings_duped[seller]['seller_link'])
+        print()
         
         # for listing in listings_duped.values():
         #     if 'phone number' not in listing:
