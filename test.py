@@ -62,7 +62,7 @@ def run(link):
     
     
     listings = []
-    for listing in info['pricing']:
+    for listing in info['pricing'][1:]:
         
         match(listing['seller']):
             case 'Amazon Resale' | 'Amazon.com' : #dont add if its from amazon 
