@@ -95,15 +95,15 @@ run(link)
 
 # print('httpbin test (multiprocessing pool)')
 
-with Pool() as pool:
+# with Pool() as pool:
         
-            # issue tasks into the process pool
-        r = pool.map_async(get_ip, range(n))
-        r.get()
+#             # issue tasks into the process pool
+#         r = pool.map_async(get_ip, range(n))
+#         r.get()
         
-        # shutdown the process pool
-        pool.close()
-        # wait for tasks to complete
-        pool.join()
-        # report all tasks done
-        print('All tasks are done', flush=True)
+#         # shutdown the process pool
+#         pool.close()
+#         # wait for tasks to complete
+#         pool.join()
+#         # report all tasks done
+#         print('All tasks are done', flush=True)
