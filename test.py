@@ -59,7 +59,7 @@ def run(link):
     
     original_listing = info['pricing'][0]
     #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
-    print(info['pricing'])
+    #print(info['pricing'])
     
     listings = []
     for listing in info['pricing'][1:]:
@@ -72,7 +72,7 @@ def run(link):
             listings.append((listing['seller'], listing))
             
     
-    print(listings)
+    #print(listings)
     listings = list(dict(listings).values())
     
     # iterates through all listings that arent the first
