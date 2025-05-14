@@ -110,7 +110,7 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        
+        print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
         pool_res.append(pool.map_async(phone_num, ['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]]))
         
         
@@ -154,8 +154,7 @@ def run(link:str):
         i = 0
         for batch in pool_res:
             for value in batch.get():
-                if(len(value) != 0):
-                    print(sellers[i], value)
+                print(sellers[i], value)
                 i+=1
         
     
