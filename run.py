@@ -145,18 +145,20 @@ def run(link:str):
     if(len(listings) == 0):
         print(title, link, 'NO SELLERS FOUND', sep='\t')
     else:
-
+        sellers = [listing['seller']  for listing in listings]
         #listings = list(dict(listings_new).values())
         # ACQUIRES ALL THE ELEMENTS
         # can start this process (phone # extraction) in the loop in the background
-        print(title, link, [listing['seller']  for listing in listings], sep='\t')
+        print(title, link, sellers, sep='\t')
         #print(title, link, listings, sep='\t')
         
+        i = 0
         for batch in pool_res:
             for value in batch.get():
-                print(value)
+                if(len(value) != 0):
+                    print(sellers[i], value)
+                i+=1
         
-        print(pool_res)
     
     
     
