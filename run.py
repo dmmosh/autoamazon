@@ -46,6 +46,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
 
 # testing purposes
 link = 'https://www.amazon.com/Turtle-Wax-53737-Patent-Pending-Anniversary/dp/B08X1SX524/?_encoding=UTF8&pd_rd_w=y5OoT&content-id=amzn1.sym.a602a706-e4fe-481e-98c3-9b75060fd322%3Aamzn1.symc.abfa8731-fff2-4177-9d31-bf48857c2263&pf_rd_p=a602a706-e4fe-481e-98c3-9b75060fd322&pf_rd_r=7CMD4G817TACD7BNWNAG&pd_rd_wg=9LGkO&pd_rd_r=41723a4e-59b1-490c-8a66-e214e1182c0a&ref_=pd_hp_d_btf_ci_mcx_mr_ca_id_hp_d'
+
 def run(link:str):
     
     listings = []
@@ -109,10 +110,10 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
+        for listing in listings_duped:
+            if 'phone number' not in listing:
+                listing['phone number'] = phone_num('https://www.amazon.com/' + listing['seller_link'])
         
-        if(duped_len>0):
-            for listing in listings_duped[int(duped_len):].values():
-                listing['address_obj'] =  phone_num('https://www.amazon.com/' + listing['seller_link'])
         
         #print(listings)
         
@@ -124,8 +125,9 @@ def run(link:str):
         # iterates through all listings that arent the first
         # first listing is the original seller's
         i+=1
-
+    
     listings = list(dict(listings_duped).values()) # gets the values from the dicts
+    
     if(len(listings) == 0):
         print(title, link, 'NO SELLERS FOUND', sep='\t')
     else:
