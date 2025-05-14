@@ -62,7 +62,7 @@ def run(link):
     
     
     listings = []
-    for listing in info['pricing']:
+    for listing in info['pricing'][1:]:
         if ( 
             listing['seller'] != 'Amazon Resale' and 
             listing['seller'] !='Amazon.com' and
