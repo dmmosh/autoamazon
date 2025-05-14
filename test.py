@@ -36,7 +36,7 @@ def run(link):
     payload = {
           "target": "amazon_pricing",
           "query": product_id(link=link),
-          "page_from": "1",
+          "page_from": "2",
           "parse": True # true for json, false for html
     }
     
@@ -72,7 +72,7 @@ def run(link):
             listings.append((listing['seller'], listing))
             
     
-    [listing['seller'] for listing in listings]
+    print(listings)
     listings = list(dict(listings).values())
     
     # iterates through all listings that arent the first
