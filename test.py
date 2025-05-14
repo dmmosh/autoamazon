@@ -62,15 +62,14 @@ def run(link):
     
     
     listings = []
-    for listing in info['pricing'][1:]:
+    for listing in info['pricing']:
+        if ( listing['seller'] != original_listing and 
+            listing['seller'] != 'Amazon Resale' and 
+            listing['seller'] !='Amazon.com' and
+            not any(i.isdigit() for i in listing['seller'])
+            ):
+            listings.append((listing['seller'], listing))
         
-        match(listing['seller']):
-            case 'Amazon Resale' | 'Amazon.com' : #dont add if its from amazon 
-                pass
-            case _: # appends to the list
-                if not any(i.isdigit() for i in listing['seller']): # if there is NO numbers in the seller name
-                    listings.append((listing['seller'], listing))
-    
     listings = list(dict(listings).values())
     
     # iterates through all listings that arent the first
