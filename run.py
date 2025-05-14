@@ -45,7 +45,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
     
 
 # testing purposes
-link='https://www.amazon.com/DP/B0015PBPJ4?th=1'
+link='https://www.amazon.com/DP/B081R15GB2'
 def run(link:str):
     
     listings = []
@@ -161,7 +161,7 @@ def run(link:str):
                     success+=1
                 i+=1
         if(success==0):
-            print('NO PHONE NUMBERS FOU')
+            print('NO PHONE NUMBERS FOUND')
     
     
     
