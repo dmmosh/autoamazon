@@ -110,7 +110,7 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        for listing in listings_duped:
+        for listing in listings_duped.values():
             if 'phone number' not in listing:
                 listing['phone number'] = phone_num('https://www.amazon.com/' + listing['seller_link'])
         
