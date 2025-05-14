@@ -153,13 +153,13 @@ def run(link:str):
         #print(title, link, listings, sep='\t')
         
         i = 0
+        success = 0
         for batch in pool_res:
             for number in batch.get():
-                if(len(number) != 0):
-                    print(sellers[i], number)
-                    i+=1
-        
-    
+                
+                print(sellers[i], number)
+                i+=1
+
     
     
     
