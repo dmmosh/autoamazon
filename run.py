@@ -110,11 +110,9 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        listings_curr = list(listings_duped.values())[duped_len:]
-        print('NEWLY ADDED ITEMS: ', [curr['seller'] for curr in listings_curr])
         
         for seller in list(listings_duped.keys())[duped_len:]:
-            print(seller ,' :   ', listings_curr[seller]['seller_link'])
+            print(seller ,' :   ', listings_duped[seller]['seller_link'])
         
         # for listing in listings_duped.values():
         #     if 'phone number' not in listing:
