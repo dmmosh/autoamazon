@@ -112,7 +112,8 @@ def run(link:str):
         
         
         for seller in list(listings_duped.keys())[duped_len:]:
-            print(seller ,' :   ', listings_duped[seller]['seller_link'])
+            listings_duped[seller]['phone number'] = run('https://www.amazon.com' + listings_duped[seller]['seller_link'])
+            #print(seller ,' :   ', listings_duped[seller]['seller_link'])
         print()
         
         # for listing in listings_duped.values():
@@ -140,7 +141,8 @@ def run(link:str):
         #listings = list(dict(listings_new).values())
         # ACQUIRES ALL THE ELEMENTS
         # can start this process (phone # extraction) in the loop in the background
-        print(title, link, [listing['seller'] for listing in listings], sep='\t')
+        #print(title, link, [listing['seller'] for listing in listings], sep='\t')
+        print(title, link, listings, sep='\t')
     
     
     
