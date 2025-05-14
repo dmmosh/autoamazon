@@ -62,9 +62,9 @@ def run(link):
     
     
     listings = []
-    for listing in info['pricing']:
+    for listing in info['pricing'][1:]:
         if ( 
-            listing['seller'] != original_listing['seller'] and
+            listing['seller'] != info['pricing'][0] and
             listing['seller'] != 'Amazon Resale' and 
             listing['seller'] !='Amazon.com' and
             not any(i.isdigit() for i in listing['seller'])
@@ -72,7 +72,7 @@ def run(link):
             listings.append((listing['seller'], listing))
             
         
-    listings = list(dict(listings).values())
+    listings = list(dict(listings[1:]).values())
     
     # iterates through all listings that arent the first
     # first listing is the original seller's
