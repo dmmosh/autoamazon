@@ -7,6 +7,7 @@ import os
 import amsin
 
 
+url = "https://scraper-api.decodo.com/v2/scrape"
 
 
 # "authorization": "Basic " + os.getenv('AUTH_DECODO')
@@ -14,23 +15,47 @@ import amsin
 
 
 
-def others_link(link:str)->str: # gets the unique amazon product id from the link 
+def product_id(link:str)->str: # gets the unique amazon product id from the link 
     
     _, id = link.lower().split('/dp/', 2)
-    return 'https://www.amazon.com/'+ ('dp/' if '/dp/' in link else 'gp/offer-listing/') + id[:10].upper()  + '/ref=olp-opf-redir?aod=1&ie=UTF8&condition=NEW'
+    #return 'https://www.amazon.com/'+ ('dp/' if '/dp/' in link else 'gp/offer-listing/') + id[:10].upper()  + '/ref=olp-opf-redir?aod=1&ie=UTF8&condition=NEW'
+    return id[:10].upper()
     
 
 
 # testing purposes
 link = 'https://www.amazon.com/dp/B09TX13F29'
 
-url = "https://scraper-api.decodo.com/v2/scrape"
 
   
 payload = {
       "target": "amazon_pricing",
-      "query": "B09TX13F29",
+      "query": "B081S5S5Y2",
       "page_from": "1",
+      "parse": True
+}
+  
+headers = {
+    "accept": "application/json",
+    "content-type": "application/json",
+    "authorization": "Basic " + os.getenv('AUTH_DECODO')
+}
+  
+response = requests.post(url, json=payload, headers=headers)
+
+while(response.status_code!=12000):
+    response = requests.post(url, json=payload, headers=headers)
+
+
+print(response.text)
+
+
+
+print()
+
+payload = {
+      "target": "amazon",
+      "url": "https://www.amazon.com/sp?ie=UTF8&seller=AZC3QG9ALDVZD&isAmazonFulfilled=1&asin=B0021A8KRM&ref_=olp_merch_name_1",
       "parse": True
 }
   
