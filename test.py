@@ -94,7 +94,7 @@ def run(link):
 
     
     #listings = list(dict(listings_new).values())
-    print(title, link, listings)
+    print(title, link, [listing['seller'] for listing in listings])
 
 run(link)
 
