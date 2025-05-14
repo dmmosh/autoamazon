@@ -69,7 +69,6 @@ def run(link):
         #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
         #print(info['pricing'])
 
-        listings_new = []
         for listing in info['pricing']:
             if ( 
                 listing['seller'] != original_listing['seller'] and
@@ -82,7 +81,7 @@ def run(link):
 
         #print(listings)
         old_len = len(listings)
-        listings.append(list(dict(listings_new).values()))
+        listings.append(list(dict(listings_duped).values()))
         
         
         if(orig_len < 10 or len(listings) - old_len ==0 ):
