@@ -92,6 +92,7 @@ def run(link):
         # first listing is the original seller's
         i+=1
 
+    listings = [i for s in listings for i in s]
     
     #listings = list(dict(listings_new).values())
     print(title, link, [listing['seller'] for listing in listings])
