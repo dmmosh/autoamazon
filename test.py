@@ -6,30 +6,30 @@ import time
 import os
 import amsin
 
-from bs4 import BeautifulSoup
 
 
 
 # "authorization": "Basic " + os.getenv('AUTH_DECODO')
 
 
-def product_id(link:str)->str:
+
+
+def others_link(link:str)->str: # gets the unique amazon product id from the link 
     
     _, id = link.lower().split('/dp/', 2)
-    return id[:10].upper()
+    return 'https://www.amazon.com/'+ ('dp/' if '/dp/' in link else 'gp/offer-listing/') + id[:10].upper()  + '/ref=olp-opf-redir?aod=1&ie=UTF8&condition=NEW'
     
 
-print(product_id('www.amazon.com/DP/B01LETURZI'))
 
+# testing purposes
+link = 'https://www.amazon.com/dp/B09TX13F29'
 
-os._exit(1)
-    
   
 url = "https://scraper-api.decodo.com/v2/scrape"
   
 payload = {
       "target": "amazon",
-      "url": "https://www.amazon.com/dp/B09H74FXNW",
+      "url": 'https://www.amazon.com/gp/offer-listing/B09TX13F29/ref=dp_olp_NEW_mbc?ie=UTF8&condition=NEW',
       "parse": True
 }
   
@@ -42,7 +42,7 @@ headers = {
 response = requests.post(url, json=payload, headers=headers)
   
 print(response.text)
-
+print(others_link(link=link))
 
 # def get_ip(i):
 #     response = requests.post(url, json=payload, headers=headers)
