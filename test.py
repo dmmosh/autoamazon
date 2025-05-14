@@ -26,7 +26,7 @@ def product_id(link:str)->str: # gets the unique amazon product id from the link
 
 
 # testing purposes
-link = 'https://www.amazon.com/DP/B081S5S5Y2?th=1'
+link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 
 
 
@@ -63,19 +63,20 @@ def run(link):
     
     listings = []
     for listing in info['pricing']:
-        if ( listing['seller'] != original_listing and 
+        if ( listing['seller'] != original_listing['seller'] and 
             listing['seller'] != 'Amazon Resale' and 
             listing['seller'] !='Amazon.com' and
             not any(i.isdigit() for i in listing['seller'])
             ):
             listings.append((listing['seller'], listing))
+            
         
     listings = list(dict(listings).values())
     
     # iterates through all listings that arent the first
     # first listing is the original seller's
     
-    print(title, link, [listing['seller'] for listing in listings], original_listing)
+    print(title, link, [listing['seller'] for listing in listings])
 
 run(link)
 
