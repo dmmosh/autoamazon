@@ -95,6 +95,7 @@ def run(link:str):
 
         if(i==1):
             out['title'] = info['title']
+            out['asin'] = info['asin']
             original_listing = info['pricing'][0]
             info['pricing'].pop(0)
         #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
@@ -183,7 +184,7 @@ def run(link:str):
             print('NO PHONE #S FOUND', 'API CALLS:', out['api_calls'], sep='\t')
             return {}
         print(out['contacts'], 'API CALLS:', out['api_calls'], sep='\t')
-
+        
         return out
 
 
