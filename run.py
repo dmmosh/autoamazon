@@ -154,9 +154,10 @@ def run(link:str):
         
         i = 0
         for batch in pool_res:
-            for value in batch.get():
-                print(sellers[i], value)
-                i+=1
+            for number in batch.get():
+                if(len(number) != 0):
+                    print(sellers[i], number)
+                    i+=1
         
     
     
