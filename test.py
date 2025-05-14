@@ -36,7 +36,7 @@ def run(link):
     payload = {
           "target": "amazon_pricing",
           "query": product_id(link=link),
-          "page_from": "1",
+          "page_from": "2",
           "parse": True # true for json, false for html
     }
     
@@ -63,8 +63,13 @@ def run(link):
     
     listings = []
     for listing in info['pricing']:
-        
-        listings.append((listing['seller'], listing))
+        if ( 
+            listing['seller'] != original_listing['seller'] and
+            listing['seller'] != 'Amazon Resale' and 
+            listing['seller'] !='Amazon.com' and
+            not any(i.isdigit() for i in listing['seller'])
+            ):
+            listings.append((listing['seller'], listing))
             
         
     listings = list(dict(listings).values())
