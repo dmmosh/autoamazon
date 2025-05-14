@@ -44,6 +44,7 @@ headers = {
 response = requests.post(url, json=payload, headers=headers)
 
 while(response.status_code!=12000):
+    print('GET REQUEST FAILED, TRYING AGAIN')
     response = requests.post(url, json=payload, headers=headers)
 
 
