@@ -59,7 +59,7 @@ def run(link):
     
     original_listing = info['pricing'][0]
     #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
-    #print(info['pricing'])
+    print(info['pricing'])
     
     listings = []
     for listing in info['pricing'][1:]:
