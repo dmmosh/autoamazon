@@ -156,9 +156,7 @@ def run(link:str):
         success = 0
         for batch in pool_res:
             for number in batch.get():
-                if(len(number)!=0):
-                    print(sellers[i], number)
-                    success+=1
+                    print(sellers[i], number, len(number))
                 i+=1
         if(success==0):
             print('NO PHONE NUMBERS FOUND')
