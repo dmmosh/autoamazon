@@ -33,7 +33,8 @@ link  = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 def run(link):
     
     listings = []
-    listings_duped=[] # pairs soon to be dicts (unduplicated)
+    listings_duped={} # pairs soon to be dicts (unduplicated)
+    # flops between list of tuples and dicts
     
     i = 1
     while(True):
@@ -67,7 +68,11 @@ def run(link):
             info['pricing'].pop(0)
         #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
         #print(info['pricing'])
+        #list(dict([(elem['author'], elem) for elem in a]).values())
 
+        listings_duped = list(listings_duped.items()) # casts to list of tuples
+        duped_len = len(listings_duped) # original duped length
+        
         for listing in info['pricing']:
             if ( 
                 listing['seller'] != original_listing['seller'] and
@@ -78,21 +83,21 @@ def run(link):
                 listings_duped.append((listing['seller'], listing))
 
 
-        #print(listings)
-        old_len = len(listings)
-        listings.append(list(dict(listings_duped).values()))
-        
-        
-        if(orig_len < 10 or len(listings) - old_len ==0 ):
+        listings_duped = dict(listings_duped) # removes the duplicates
+        if(orig_len < 10 or duped_len == len(listings_duped)):  # if no further elements OR no change (repeats infinitely)
             break
+        
+        #print(listings)
+        
+        #listings.append(list(dict(listings_duped).values()))
         
 
         # iterates through all listings that arent the first
         # first listing is the original seller's
         i+=1
 
-    listings = [i for s in listings for i in s]
-    
+    listings = list(dict(listings_duped).values())
+
     #listings = list(dict(listings_new).values())
     print(title, link, [listing['seller'] for listing in listings])
 
