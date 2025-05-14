@@ -45,7 +45,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
     
 
 # testing purposes
-link='https://www.amazon.com/dp/B08PPYQ9W5?th=1'
+link='https://www.amazon.com/Tineco-Complete-Cordless-One-Step-Cleaning/dp/B09QQ9T4XY?crid=36TCVCHZZ6XJU&dib=eyJ2IjoiMSJ9.I796jttQls7iMfyDp8TUUQ.S39GuS79BLTeaYhIYpQ0MM8KmaPoNQInKHz0RmaG8Bw&dib_tag=se&keywords=B09QQ9T4XY&qid=1745874636&sprefix=b09qq9t4xy%2Caps%2C136&sr=8-5'
 def run(link:str):
     
     listings = []
