@@ -9,7 +9,6 @@ import amsin
 from bs4 import BeautifulSoup
 
 
-import requests
 
 # "authorization": "Basic " + os.getenv('AUTH_DECODO')
 
