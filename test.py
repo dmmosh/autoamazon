@@ -63,12 +63,8 @@ def run(link):
     
     listings = []
     for listing in info['pricing']:
-        if ( 
-            listing['seller'] != 'Amazon Resale' and 
-            listing['seller'] !='Amazon.com' and
-            not any(i.isdigit() for i in listing['seller'])
-            ):
-            listings.append((listing['seller'], listing))
+        
+        listings.append((listing['seller'], listing))
             
         
     listings = list(dict(listings).values())
