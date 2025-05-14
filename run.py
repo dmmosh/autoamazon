@@ -109,8 +109,10 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        for listing in listings_duped[(duped_len if duped_len == 0 else None):].values():
-            listing['address_obj'] =  phone_num('https://www.amazon.com/' + listing['seller_link'])
+        
+        if(duped_len>0):
+            for listing in listings_duped[int(duped_len):].values():
+                listing['address_obj'] =  phone_num('https://www.amazon.com/' + listing['seller_link'])
         
         #print(listings)
         

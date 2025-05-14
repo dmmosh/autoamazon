@@ -15,3 +15,6 @@ password = os.getenv('PASSWORD_DECODO')
 # "authorization": "Basic " + os.getenv('AUTH_DECODO')
 
 
+x = [1,2,3]
+
+print(x[0:])
