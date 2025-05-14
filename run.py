@@ -138,7 +138,7 @@ def run(link:str):
         #listings = list(dict(listings_new).values())
         # ACQUIRES ALL THE ELEMENTS
         # can start this process (phone # extraction) in the loop in the background
-        print(title, link, listings, sep='\t')
+        print(title, link, [listing['seller'] for listing in listings], sep='\t')
     
     
     
