@@ -30,5 +30,7 @@ headers = {
 response = requests.post(url, json=payload, headers=headers, auth=(username,password))
 
 
-if 'seller-contact-phone' in response.text:
-    print('JACKPOT')
+
+index = response.text.find('seller-contact-phone')
+if(index>-1): # if seller phone number DOES exist
+    print(response.text[index:index+20])
