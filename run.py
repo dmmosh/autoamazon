@@ -112,7 +112,7 @@ def run(link:str):
         
         
         for seller in list(listings_duped.keys())[duped_len:]:
-            listings_duped[seller]['phone number'] = run('https://www.amazon.com' + listings_duped[seller]['seller_link'])
+            listings_duped[seller]['phone number'] = phone_num('https://www.amazon.com' + listings_duped[seller]['seller_link'])
             #print(seller ,' :   ', listings_duped[seller]['seller_link'])
         print()
         
