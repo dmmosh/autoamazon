@@ -50,11 +50,17 @@ def run(link:str):
     
     listings = []
     listings_duped={} # pairs soon to be dicts (unduplicated)
-    
-    pool = Pool(processes=5)
+
+    pool = Pool()
     pool_res = []
     # flops between list of tuples and dicts
     
+    out = {
+        'link': link,
+        'api_calls':0
+    } # output dict: if succeeds, contains the product name, link, and a nested dictionary with companies and their phone numbers
+    # only return if successful, otherwise print
+
     i = 1
     while(True):
         payload = {
@@ -70,19 +76,24 @@ def run(link:str):
         }
 
         response = requests.post(url, json=payload, headers=headers, auth=(username,password))
-
-        if (response.status_code != 200):
+        out['api_calls']+=1
+        fails = 0
+        while(fails<3 and response.status_code != 200):
             print('GET REQUEST FAILED, TRYING AGAIN')
             response = requests.post(url, json=payload, auth=(username,password))
+            out['api_calls']+=1
+            fails+=1
+        if(fails==3):
+            print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
 
         info = json.loads(response.text)['results'][0]['content']['results']
-        title = info['title']
         
         orig_len = len(info['pricing'])
         if (orig_len <= 1):
             break
 
         if(i==1):
+            out['title'] = info['title']
             original_listing = info['pricing'][0]
             info['pricing'].pop(0)
         #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
@@ -110,7 +121,8 @@ def run(link:str):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
+        #print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
+        out['api_calls']+=(len(listings_duped)-duped_len)
         pool_res.append(pool.map_async(phone_num, ['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]]))
         
         
@@ -142,33 +154,44 @@ def run(link:str):
     pool.close()
     pool.join()
     
+    print(out['title'], out['link'],'', sep='\t',end='')
     if(len(listings) == 0):
-        print(title, link, 'NO SELLERS FOUND', sep='\t')
+        print('NO VALID SELLERS FOUND', 'API CALLS:', out['api_calls'], sep='\t')
+        return {} # reutrns an empty list: wont add to the resulting file
     else:
         sellers = [listing['seller']  for listing in listings]
         #listings = list(dict(listings_new).values())
         # ACQUIRES ALL THE ELEMENTS
         # can start this process (phone # extraction) in the loop in the background
-        print(title, link, sellers, sep='\t')
+        #print(title, link, sellers, sep='\t')
         #print(title, link, listings, sep='\t')
         
         i = 0
-        success = 0
+        #success = 0
+        out['contacts'] = {}
+
         for batch in pool_res:
+            
             for number in batch.get():
                 if(len(number)>0):
-                    print(sellers[i], number)
-                    success+=1
+                    out['contacts'][sellers[i]] = number
+                    #out.append((sellers[i], number))
+                    #success+=1
                 i+=1
-        if(success==0):
-            print('NO PHONE NUMBERS FOUND')
-    
+        if(len(out['contacts'])==0): # if no phone numbers found
+            print('NO PHONE #S FOUND', 'API CALLS:', out['api_calls'], sep='\t')
+            return {}
+        print(out['contacts'], 'API CALLS:', out['api_calls'], sep='\t')
+
+        return out
+
+
     
     
 
-run(link)
+print(run(link))
 
-pool = Pool()
+#pool = Pool()
 
 #print(others_link(link=link))
 
