@@ -26,7 +26,7 @@ def product_id(link:str)->str: # gets the unique amazon product id from the link
 
 
 # testing purposes
-link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
+link = 'https://www.amazon.com/DP/B081S5S5Y2?th=1'
 
 
 
