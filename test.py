@@ -75,7 +75,7 @@ def run(link):
     # iterates through all listings that arent the first
     # first listing is the original seller's
     
-    print(title, link, [listing['seller'] for listing in listings])
+    print(title, link, [listing['seller'] for listing in listings], original_listing)
 
 run(link)
 
