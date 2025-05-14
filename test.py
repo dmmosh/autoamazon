@@ -7,7 +7,9 @@ import os
 import amsin
 
 
-url = "https://scraper-api.decodo.com/v2/scrape"
+url = 'https://scraper-api.decodo.com/v2/scrape'
+username = os.getenv('USERNAME_DECODO')
+password = os.getenv('PASSWORD_DECODO')
 
 
 # "authorization": "Basic " + os.getenv('AUTH_DECODO')
@@ -24,51 +26,59 @@ def product_id(link:str)->str: # gets the unique amazon product id from the link
 
 
 # testing purposes
-link = 'https://www.amazon.com/dp/B09TX13F29'
+link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 
 
+
+
+def run(link):
   
-payload = {
-      "target": "amazon_pricing",
-      "query": "B081S5S5Y2",
-      "page_from": "1",
-      "parse": True
-}
-  
-headers = {
-    "accept": "application/json",
-    "content-type": "application/json",
-    "authorization": "Basic " + os.getenv('AUTH_DECODO')
-}
-  
-response = requests.post(url, json=payload, headers=headers)
+    payload = {
+          "target": "amazon_pricing",
+          "query": product_id(link=link),
+          "page_from": "1",
+          "parse": True # true for json, false for html
+    }
+    
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+    
+    response = requests.post(url, json=payload, headers=headers, auth=(username,password))
 
-while(response.status_code!=12000):
-    print('GET REQUEST FAILED, TRYING AGAIN')
-    response = requests.post(url, json=payload, headers=headers)
+    if (response.status_code != 200):
+        print('GET REQUEST FAILED, TRYING AGAIN')
+        response = requests.post(url, json=payload, auth=(username,password))
 
+    info = json.loads(response.text)['results'][0]['content']['results']
+    title = info['title']
+    if (len(info['pricing']) <= 1):
+        print(title, link, 'NO OTHER SELLERS FOUND', sep='\t')
+        return
+    
+    original_listing = info['pricing'][0]
+    #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
+    
+    
+    listings = []
+    for listing in info['pricing']:
+        
+        match(listing['seller']):
+            case 'Amazon Resale' | 'Amazon.com' : #dont add if its from amazon 
+                pass
+            case _: # appends to the list
+                if not any(i.isdigit() for i in listing['seller']): # if there is NO numbers in the seller name
+                    listings.append((listing['seller'], listing))
+    
+    listings = list(dict(listings).values())
+    
+    # iterates through all listings that arent the first
+    # first listing is the original seller's
+    
+    print(title, link, [listing['seller'] for listing in listings])
 
-print(response.text)
-
-
-
-print()
-
-payload = {
-      "target": "amazon",
-      "url": "https://www.amazon.com/sp?ie=UTF8&seller=AZC3QG9ALDVZD&isAmazonFulfilled=1&asin=B0021A8KRM&ref_=olp_merch_name_1",
-      "parse": True
-}
-  
-headers = {
-    "accept": "application/json",
-    "content-type": "application/json",
-    "authorization": "Basic "+ os.getenv('AUTH_DECODO')
-}
-  
-response = requests.post(url, json=payload, headers=headers)
-  
-print(response.text)
+run(link)
 
 
 #print(others_link(link=link))
