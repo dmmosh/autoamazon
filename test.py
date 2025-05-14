@@ -33,11 +33,8 @@ link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 
 def run(link):
     
-    
-    listings=[]
-    duped_listings = [] # placeholder for the pool of duplicate listings
-    
-    original_listing = ''
+    listings = []
+    listings_duped=[] # pairs soon to be dicts (unduplicated)
     
     i = 1
     while(True):
@@ -63,17 +60,16 @@ def run(link):
         title = info['title']
         
         orig_len = len(info['pricing'])
-        if (orig_len <= 1):  # no elements
+        if (orig_len <= 1):
             break
-        
 
-        if(i==1): # first page
+        if(i==1):
             original_listing = info['pricing'][0]
             info['pricing'].pop(0)
-            
         #listings = list(dict([(elem['seller'], elem) for elem in info['pricing']]).values())
         #print(info['pricing'])
 
+        listings_new = []
         for listing in info['pricing']:
             if ( 
                 listing['seller'] != original_listing['seller'] and
@@ -81,13 +77,15 @@ def run(link):
                 listing['seller'] !='Amazon.com' and
                 not any(i.isdigit() for i in listing['seller'])
                 ):
-                duped_listings.append((listing['seller'], listing))
+                listings_duped.append((listing['seller'], listing))
 
 
         #print(listings)
         old_len = len(listings)
-        listings.append(list(dict(duped_listings).values()))
-        if(orig_len < 10 or len(listings)-old_len == 0):
+        listings.append(list(dict(listings_new).values()))
+        
+        
+        if(orig_len < 10 or len(listings) - old_len ==0 ):
             break
         
 
@@ -95,6 +93,8 @@ def run(link):
         # first listing is the original seller's
         i+=1
 
+    
+    #listings = list(dict(listings_new).values())
     print(title, link, [listing['seller'] for listing in listings])
 
 run(link)
