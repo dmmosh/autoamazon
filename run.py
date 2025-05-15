@@ -1,6 +1,7 @@
 import requests
 import multiprocessing
 from multiprocessing.pool import Pool
+import concurrent.futures
 import json
 import time
 import os
@@ -42,16 +43,21 @@ def phone_num(link:str)->str: # gets the phone number from the link
     else: 
         return '' # NO PHONE NUMBER FOUND
     
-    
+
+
 
 # testing purposes
-link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
+#link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 def run(link:str):
+    if(link.count('amazon.com') ==0 ): # base case
+        print(link, 'NON-AMAZON LINK', sep='\t')
+        return {}
+
+    pool = Pool()
     
     listings = []
     listings_duped={} # pairs soon to be dicts (unduplicated)
 
-    pool = Pool()
     pool_res = []
     # flops between list of tuples and dicts
     
@@ -155,7 +161,7 @@ def run(link:str):
     pool.close()
     pool.join()
     
-    print(out['title'], out['link'],'', sep='\t',end='')
+    print(out['title'])
     if(len(listings) == 0):
         print('NO VALID SELLERS FOUND', 'API CALLS:', out['api_calls'], sep='\t')
         return {} # reutrns an empty list: wont add to the resulting file
@@ -183,15 +189,20 @@ def run(link:str):
         if(len(out['contacts'])==0): # if no phone numbers found
             print('NO PHONE #S FOUND', 'API CALLS:', out['api_calls'], sep='\t')
             return {}
-        print(out['contacts'], 'API CALLS:', out['api_calls'], sep='\t')
+        print('API CALLS:', out['api_calls'], sep='\t')
         
         return out
 
+def run_all(links:list): # returns 
+    #pool_out = pool.map(run,links)
+    
+    return [run(link) for link in links]
+
 
     
     
 
-print(run(link))
+#print(run(link))
 
 #pool = Pool()
 
