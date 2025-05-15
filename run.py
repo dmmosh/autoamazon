@@ -51,8 +51,6 @@ def phone_num(link:str)->str: # gets the phone number from the link
 #link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 def run(link):
     
-    if isinstance(link, list):
-        link = link[0]
     if(link.count('amazon.com') ==0 ): # base case
         
         print(link, 'NON-AMAZON LINK', sep='\t')
