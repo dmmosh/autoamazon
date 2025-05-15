@@ -1,6 +1,7 @@
 import requests
 import multiprocessing
 from multiprocessing.pool import Pool
+from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 import json
 import time
@@ -50,6 +51,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
 #link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 def run(link:str):
     if(link.count('amazon.com') ==0 ): # base case
+        print(link)
         print(link, 'NON-AMAZON LINK', sep='\t')
         return {}
 
@@ -193,10 +195,6 @@ def run(link:str):
         
         return out
 
-def run_all(links:list): # returns 
-    #pool_out = pool.map(run,links)
-    
-    return [run(link) for link in links]
 
 
     
