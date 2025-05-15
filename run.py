@@ -49,7 +49,8 @@ def phone_num(link:str)->str: # gets the phone number from the link
 
 # testing purposes
 #link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
-def run(link:str):
+def run(link):
+    
     if isinstance(link, list):
         link = link[0]
     if(link.count('amazon.com') ==0 ): # base case
