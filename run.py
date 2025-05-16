@@ -278,7 +278,7 @@ if __name__ == "__main__":
                             rows.extend(list(sum(product['contacts'].items(), ())))
 
                             wait_access(out_file,'a')
-                            with open(out_file, 'a') as file:
+                            with open(out_file, 'a', newline='') as file:
                                 #print(product['contacts'])
                                 #print(rows)
                                 csv.writer(file,delimiter=',').writerow(rows)
@@ -293,6 +293,7 @@ if __name__ == "__main__":
                             'VALID LINKS:\t'+str(batch_valid_links),
                                 'GOOD LINKS:\t'+str(batch_good_links),
                                 sep='\n')
+                print()
                 if(batch_good_links>0):
                     print('saved in','\"'+os.path.abspath(out_file)+'\"', sep='\t')
 
