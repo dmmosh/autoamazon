@@ -78,7 +78,6 @@ def run(link):
     # flops between list of tuples and dicts
     
     out = {
-        'link': link,
         'api_calls':0,
         'contacts':{}
     } # output dict: if succeeds, contains the product name, link, and a nested dictionary with companies and their phone numbers
@@ -122,6 +121,7 @@ def run(link):
         if(i==1): #only assigns in the first page number
             out['title'] = info['title']
             out['asin'] = info['asin']
+
             if (len(info['pricing']) == 0):
                 print('LISTING CURRENTLY UNAVAILABLE', 'API CALLS:', out['api_calls'], sep='\t')
                 return out
@@ -276,15 +276,18 @@ if __name__ == "__main__":
                         batch_api_calls+=product['api_calls']
 
                         
-                        if(len(product['contacts']) >0):
-                            rows = [product['link'], product['title'], product['asin']]
-                            rows.extend(list(sum(product['contacts'].items(), ())))
+                        if(len(product['contacts']) >0): # if there is a contact
+                            rows = ['https://www.amazon.com/dp/' + product['asin'], product['title'], product['asin']] # product info
 
                             wait_access(out_file,'a')
                             with open(out_file, 'a', newline='', encoding='utf-8') as file:
-                                #print(product['contacts'])
-                                #print(rows)
-                                csv.writer(file,delimiter=',').writerow(rows)
+                                for seller, phone in product['contacts'].items():
+                                    out = rows.copy()
+                                    out.append(seller)
+                                    out.append(phone)
+                                    csv.writer(file,delimiter=',').writerow(out)
+
+                            
                             batch_good_links+=1
                             
                             print('saved in','\"'+out_file+'\"', sep='\t')
