@@ -57,7 +57,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
     
     index = response.text.find('seller-contact-phone')
     if(index>-1): # if seller phone number DOES exist
-        return response.text[index+35:index+53].split('<')[0] # phone number found
+        return response.text[index:index+53].split('<',2)[0].split('>',2)[1] # phone number found
     else: 
         return '' # NO PHONE NUMBER FOUND
     
