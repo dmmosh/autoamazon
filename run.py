@@ -85,8 +85,8 @@ def run(link):
 
     i = 1
     while(True):
-        print('processing seller page '+ str(i) +'...', end='\t')
 
+        print('processing seller page '+ str(i) +'...', end='\t')
         payload = {
               "target": "amazon_pricing",
               "query": product_id(link=link),
@@ -100,6 +100,7 @@ def run(link):
         }
 
         response = requests.post(url, json=payload, headers=headers, auth=(username,password))
+
         out['api_calls']+=1
         fails = 0
         while(fails<3 and response.status_code != 200):
@@ -108,8 +109,10 @@ def run(link):
             response = requests.post(url, json=payload, auth=(username,password))
             out['api_calls']+=1
             fails+=1
+        
+        print('DONE')
+
         if(fails==3):
-            print('DONE')
             print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
             return out
 
@@ -119,7 +122,6 @@ def run(link):
             out['title'] = info['title']
             out['asin'] = info['asin']
             if (len(info['pricing']) == 0):
-                print('DONE')
                 print('LISTING CURRENTLY UNAVAILABLE', 'API CALLS:', out['api_calls'], sep='\t')
                 return out
             original_listing = info['pricing'][0]
@@ -154,11 +156,11 @@ def run(link):
         if(duped_len == len(listings_duped)):  # if no change (repeats infinitely)
             break
         
-        print('DONE')
         #print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
         print('requesting seller contacts...', end='\t')
         pool_res.append(pool.map_async(phone_num, ['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]]))
         print('DONE')
+
         
         #print(['https://www.amazon.com' + listing['seller_link'] for listing in list(listings_duped.values())[duped_len:]])
         
@@ -182,9 +184,9 @@ def run(link):
         # iterates through all listings that arent the first
         # first listing is the original seller's
     
+    print('waiting on remaining seller contacts...', end='\t')
     listings = list(dict(listings_duped).values()) # gets the values from the dicts
     
-    print('waiting on seller contacts...',end='\t')
     pool.close()
     pool.join()
     print('DONE')
@@ -315,6 +317,10 @@ if __name__ == "__main__":
                                 sep='\n')
         if(total_good_links>0):
             print('saved in','\"'+os.path.abspath(out_file)+'\"', sep='\t')
+        try:
+            sys.exit(130)
+        except SystemExit:
+            os._exit(130)
 
 
         
