@@ -6,6 +6,7 @@ import json
 import time
 import os
 import csv
+import re
 
 
 url = 'https://scraper-api.decodo.com/v2/scrape'
@@ -280,7 +281,7 @@ if __name__ == "__main__":
                             rows.extend(list(sum(product['contacts'].items(), ())))
 
                             wait_access(out_file,'a')
-                            with open(out_file, 'a', newline='') as file:
+                            with open(out_file, 'a', newline='', encoding='utf-8') as file:
                                 #print(product['contacts'])
                                 #print(rows)
                                 csv.writer(file,delimiter=',').writerow(rows)
