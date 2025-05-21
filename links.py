@@ -32,7 +32,7 @@ url = 'https://scraper-api.decodo.com/v2/scrape'
 username = os.getenv('USERNAME_DECODO')
 password = os.getenv('PASSWORD_DECODO')
 
-starting_page = 395    # starting page (inclusive)
+starting_page = 400    # starting page (inclusive)
 ending_page = 20 # ending page (inclusive)
 
 
