@@ -1,5 +1,3 @@
-from run import check_access
-from run import wait_access
 import requests
 import multiprocessing
 from multiprocessing.pool import Pool
@@ -35,7 +33,7 @@ username = os.getenv('USERNAME_DECODO')
 password = os.getenv('PASSWORD_DECODO')
 
 starting_page = 395    # starting page (inclusive)
-ending_page = 380 # ending page (inclusive)
+ending_page = 20 # ending page (inclusive)
 
 
 total_api_calls = 0
@@ -66,7 +64,20 @@ def initializer():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
-
+def check_access(file, mode):
+   try:
+      open(file, mode)
+      return True
+   except PermissionError:
+      return False
+   
+def wait_access(file,mode):
+    first_loop = True
+    while(check_access(file=file,mode=mode) == False):
+        if(first_loop):
+            print(file + ' access permissions error. Try closing the file. Waiting...')
+            first_loop= False
+        time.sleep(1)
 
 
 def iterate_category(args):
@@ -123,6 +134,7 @@ if __name__ == "__main__":
     if(len(sys.argv) < 2):
         print('Needs 1 argument. 0 were given.')
         print('python', sys.argv[0], '<output links file (csv)>')
+        os._exit(1)
 
     out_file = sys.argv[1]
     
