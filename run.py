@@ -227,6 +227,12 @@ def run(link):
 
 if __name__ == "__main__":
     
+    if(len(sys.argv) < 3):
+        print('Needs 2 arguments. ' + str(len(sys.argv)-1) +' were given.')
+        
+        print('python', sys.argv[0], '<input links file (csv)> <output phone #s file (csv)>')
+        os._exit(0)
+    
     input_file = sys.argv[1]
     out_file = sys.argv[2]
     prev = []
@@ -237,7 +243,7 @@ if __name__ == "__main__":
 
     last_modified = os.path.getmtime(input_file)
 
-    print("AUTO UPDATE DAEMON RUNNING")
+    print("AUTO UPDATE SELLERS DAEMON RUNNING")
 
     try:
         while True:

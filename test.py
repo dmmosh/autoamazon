@@ -1,19 +1,19 @@
-
-from concurrent.futures import ThreadPoolExecutor
 import requests
-
-def fetch(url):
-    response = requests.get(url)
-    return f"{url}: {response.status_code}"
-
-urls = [
-    "https://www.example.com",
-    "https://www.python.org",
-    "https://www.openai.com"
-]
-
-with ThreadPoolExecutor(max_workers=3) as executor:
-    results = executor.map(fetch, urls)
-
-for result in results:
-    print(result)
+  
+url = "https://scraper-api.decodo.com/v2/scrape"
+  
+payload = {
+      "target": "amazon",
+      "url": "https://www.amazon.com/s?i=smart-home&s=exact-aware-popularity-rank&page=392",
+      "parse": True
+}
+  
+headers = {
+    "accept": "application/json",
+    "content-type": "application/json",
+    "authorization": "Basic VTAwMDAyNjg2ODk6UFdfMWU1ZGVlZjYxODk5MGY5NzJiYmJiMjM2NDIyNTI4M2Ey"
+}
+  
+response = requests.post(url, json=payload, headers=headers)
+  
+print(response.text)
