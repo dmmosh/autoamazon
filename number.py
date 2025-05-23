@@ -11,7 +11,7 @@ import re
 
 url = 'https://scraper-api.decodo.com/v2/scrape'
 username = os.getenv('USERNAME_DECODO')
-password = os.getenv('PASSWORD_DECODO')
+password = os.getenv('PASSWORD_DECODO') + 'fksjlkdjl'
 
 total_api_calls = 0
 total_valid_links = 0
@@ -42,7 +42,47 @@ def wait_access(file,mode):
             first_loop= False
         time.sleep(1)
 
-    
+
+def post_safe(url,payload,headers,message='requesting info...'):
+    print(message)
+    response= None
+    fails = 0
+    while(True):
+        response = requests.post(url, json=payload, auth=(username,password))
+        msg = json.loads(response.text)
+
+        if(response.status_code == 200):
+            print(message,'DONE', sep='\t')
+            break
+            
+
+        if 'message' in msg and msg['message'] == 'Your current plan\'s quota has been reached. Upgrade your plan to continue scraping.':
+            print('FATAL SUPER ERROR: OUT OF DECODO REQUESTS')
+            print('Buy more API requests on https://dashboard.decodo.com/')
+            print('last accessed link:')
+            if 'url' in payload:
+                print(payload['url'])
+            elif 'query' in payload:
+                print('https://www.amazon.com/dp/' + payload['query'])
+
+            os._exit(1)
+
+
+        if(fails>=3): # if failed 3 times
+            link = payload[('url')]
+            print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
+            response= None
+            break
+
+
+        # if failed 
+        print(response.text)
+        fails+=1
+        print('REQUEST FAILED, TRYING AGAIN')
+
+    return (response, 1+fails)
+
+
     
 def phone_num(link:str)->str: # gets the phone number from the link 
     payload = {
@@ -104,7 +144,8 @@ def run(link):
         out['api_calls']+=1
         fails = 0
         while(fails<3 and response.status_code != 200):
-            
+            msg = json.loads(response.text)
+
             print('GET REQUEST FAILED, TRYING AGAIN')
             response = requests.post(url, json=payload, auth=(username,password))
             out['api_calls']+=1
