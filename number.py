@@ -1,6 +1,7 @@
 import requests
 import multiprocessing
 from multiprocessing.pool import Pool
+import signal
 import sys
 import json
 import time
@@ -11,14 +12,16 @@ import re
 
 url = 'https://scraper-api.decodo.com/v2/scrape'
 username = os.getenv('USERNAME_DECODO')
-password = os.getenv('PASSWORD_DECODO') + 'fksjlkdjl'
+password = os.getenv('PASSWORD_DECODO')
 
-total_api_calls = 0
 total_valid_links = 0
 total_good_links = 0
 
 
 
+def initializer():
+    """Ignore CTRL+C in the worker process."""
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 def product_id(link:str)->str: # gets the unique amazon product id from the link 
     
@@ -42,20 +45,43 @@ def wait_access(file,mode):
             first_loop= False
         time.sleep(1)
 
+def exit_msg():
+    print('DAEMON DONE. CLOSING', 
+                            'TOTAL VALID LINKS:\t' + str(total_valid_links),
+                            'TOTAL GOOD LINKS:\t' + str(total_good_links),
+                                sep='\n')
+    if(total_good_links>0):
+        print('saved in','\"'+os.path.abspath(out_file)+'\"', sep='\t')
+    try:
+        sys.exit(130)
+    except SystemExit:
+        os._exit(130)
 
-def post_safe(url,payload,headers,message='requesting info...'):
-    print(message)
-    response= None
+
+def post_safe(payload,headers,message=''):
+    if(len(message)>0):
+        print(message)
     fails = 0
     while(True):
-        response = requests.post(url, json=payload, auth=(username,password))
-        msg = json.loads(response.text)
+        response = requests.post(url=url, json=payload, headers=headers, auth=(username,password))
 
         if(response.status_code == 200):
-            print(message,'DONE', sep='\t')
-            break
-            
+            if(len(message)>0):
+                print(message,'DONE', sep='\t')
+            return response
 
+        if(fails>=3): # if failed 3 times
+            link = 'link N/A'
+            if 'url' in payload:
+                link = payload['url']
+            elif 'query' in payload:
+                link = 'https://www.amazon.com/dp/' + payload['query']
+
+            if(len(message)>0):
+                print(message,'FAILED', link, sep='\t')
+            return None
+            
+        msg = json.loads(response.text)
         if 'message' in msg and msg['message'] == 'Your current plan\'s quota has been reached. Upgrade your plan to continue scraping.':
             print('FATAL SUPER ERROR: OUT OF DECODO REQUESTS')
             print('Buy more API requests on https://dashboard.decodo.com/')
@@ -64,15 +90,10 @@ def post_safe(url,payload,headers,message='requesting info...'):
                 print(payload['url'])
             elif 'query' in payload:
                 print('https://www.amazon.com/dp/' + payload['query'])
+            else:
+                print('link N/A, look at previous links')
 
             os._exit(1)
-
-
-        if(fails>=3): # if failed 3 times
-            link = payload[('url')]
-            print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
-            response= None
-            break
 
 
         # if failed 
@@ -80,20 +101,32 @@ def post_safe(url,payload,headers,message='requesting info...'):
         fails+=1
         print('REQUEST FAILED, TRYING AGAIN')
 
-    return (response, 1+fails)
 
 
     
 def phone_num(link:str)->str: # gets the phone number from the link 
-    payload = {
-      "url": link,
-      "headless": "html"
-    }
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json"
-    }
-    response = requests.post(url, json=payload, headers=headers, auth=(username,password))
+    # payload = {
+    #   "url": link,
+    #   "headless": "html"
+    # }
+    # headers = {
+    #     "accept": "application/json",
+    #     "content-type": "application/json"
+    # }
+    # response = requests.post(url, json=payload, headers=headers, auth=(username,password))
+    response = post_safe(
+        payload = {
+            "url": link,
+            "headless": "html"
+        },
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json"
+        }
+    )
+    if response is None:
+        return ''
+
     
     index = response.text.find('seller-contact-phone')
     if(index>-1): # if seller phone number DOES exist
@@ -108,7 +141,7 @@ def phone_num(link:str)->str: # gets the phone number from the link
 #link = 'https://www.amazon.com/dp/B08PPYQ9W5?th=1'
 def run(link):
 
-    pool = Pool()
+    pool = Pool(initializer=initializer)
     
     listings = []
     listings_duped={} # pairs soon to be dicts (unduplicated)
@@ -116,9 +149,7 @@ def run(link):
 
     pool_res = []
     # flops between list of tuples and dicts
-    
     out = {
-        'api_calls':0,
         'contacts':{}
     } # output dict: if succeeds, contains the product name, link, and a nested dictionary with companies and their phone numbers
     # only return if successful, otherwise print
@@ -126,36 +157,24 @@ def run(link):
     i = 1
     while(True):
 
-        print('processing seller page '+ str(i) +'...', end='\t')
-        payload = {
+        response=post_safe(
+            payload = {
               "target": "amazon_pricing",
               "query": product_id(link=link),
               "page_from": str(i),
               "parse": True # true for json, false for html
-        }
+            },
+    
+            headers = {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            message='processing seller page '+ str(i) +'...'
+        )
 
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json"
-        }
-
-        response = requests.post(url, json=payload, headers=headers, auth=(username,password))
-
-        out['api_calls']+=1
-        fails = 0
-        while(fails<3 and response.status_code != 200):
-            msg = json.loads(response.text)
-
-            print('GET REQUEST FAILED, TRYING AGAIN')
-            response = requests.post(url, json=payload, auth=(username,password))
-            out['api_calls']+=1
-            fails+=1
-        
-        print('DONE')
-
-        if(fails==3):
-            print('REQUEST FOR LINK', link, 'FAILED: SKIP', 'API CALLS:', out['api_calls'], sep='\t')
+        if response is None:
             return out
+        
 
         info = json.loads(response.text)['results'][0]['content']['results']
 
@@ -164,7 +183,7 @@ def run(link):
             out['asin'] = info['asin']
 
             if (len(info['pricing']) == 0):
-                print('LISTING CURRENTLY UNAVAILABLE', 'API CALLS:', out['api_calls'], sep='\t')
+                print('LISTING CURRENTLY UNAVAILABLE', sep='\t')
                 return out
             original_listing = info['pricing'][0]
             info['pricing'].pop(0)
@@ -235,7 +254,7 @@ def run(link):
     
     print(out['title'])
     if(len(listings) == 0):
-        print('NO VALID SELLERS FOUND', 'API CALLS:', out['api_calls'], sep='\t')
+        print('NO VALID SELLERS FOUND', sep='\t')
 
     else:
         sellers = [listing['seller']  for listing in listings]
@@ -256,12 +275,9 @@ def run(link):
                     #out.append((sellers[i], number))
                     #success+=1
                 i+=1
-        out['api_calls']+=i
 
         if(len(out['contacts'])==0): # if no phone numbers found
-            print('NO PHONE #S FOUND', 'API CALLS:', out['api_calls'], sep='\t')
-        else:
-            print('API CALLS:', out['api_calls'], sep='\t')
+            print('NO PHONE #S FOUND')
     
     return out
 
@@ -302,8 +318,6 @@ if __name__ == "__main__":
                 prev = curr
 
 
-                batch_api_calls = 0
-                batch_valid_links=0
                 batch_good_links = 0
 
                 for link in new: # new is the batch 
@@ -313,14 +327,10 @@ if __name__ == "__main__":
 
                     
                     if (link.count('amazon.com')>0): # valid link, api calls made, 
-                        if(batch_valid_links==0): # if it's the first valid link
-                            print('newly added link(s):')
                         print()
                         print(link, '\t')
-                        batch_valid_links+=1
 
                         product = run(link)
-                        batch_api_calls+=product['api_calls']
 
                         
                         if(len(product['contacts']) >0): # if there is a contact
@@ -342,8 +352,6 @@ if __name__ == "__main__":
                     else:
                         print(link, 'invalid link, skipping', sep='\t')
                 print('BATCH DONE', 
-                            'API CALLS:\t'+ str(batch_api_calls), 
-                            'VALID LINKS:\t'+str(batch_valid_links),
                                 'GOOD LINKS:\t'+str(batch_good_links),
                                 sep='\n')
                 print()
@@ -355,23 +363,14 @@ if __name__ == "__main__":
                         
 
                 
-                total_api_calls+=batch_api_calls
-                total_valid_links+=batch_valid_links
                 total_good_links+=batch_good_links
                 
             time.sleep(1)  # check every 1 second
-    except KeyboardInterrupt:
-        print('DAEMON DONE. CLOSING', 
-                            'API CALLS TOTAL:\t'+ str(total_api_calls), 
-                            'VALID LINKS TOTAL:\t'+str(total_valid_links),
-                                'GOOD LINKS TOTAL:\t'+str(total_good_links),
-                                sep='\n')
-        if(total_good_links>0):
-            print('saved in','\"'+os.path.abspath(out_file)+'\"', sep='\t')
-        try:
-            sys.exit(130)
-        except SystemExit:
-            os._exit(130)
+    except (KeyboardInterrupt, Exception) as e:
+        print()
+        exit_msg()
+    else:
+        exit_msg()
 
 
         

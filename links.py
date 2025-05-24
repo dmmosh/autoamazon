@@ -79,6 +79,56 @@ def wait_access(file,mode):
             first_loop= False
         time.sleep(1)
 
+def price(cost):
+    if isinstance(cost,float) or isinstance(cost,int):
+        return cost
+    return 0
+
+def post_safe(payload,headers,message=''):
+
+    if(len(message)>0):
+        print(message)
+    fails = 0
+    while(True):
+        response = requests.post(url=url, json=payload, headers=headers, auth=(username,password))
+        if(response.status_code == 200):
+            if(len(message)>0):
+                print(message,'DONE', sep='\t')
+            return response
+
+        if(fails>=3): # if failed 3 times
+            link = 'link N/A'
+            if 'url' in payload:
+                link = payload['url']
+            elif 'query' in payload:
+                link = 'https://www.amazon.com/dp/' + payload['query']
+
+            if(len(message)>0):
+                print(message,'FAILED', link, sep='\t')
+            return None
+            
+        msg = json.loads(response.text)
+        if 'message' in msg and msg['message'] == 'Your current plan\'s quota has been reached. Upgrade your plan to continue scraping.':
+            print('FATAL SUPER ERROR: OUT OF DECODO REQUESTS')
+            print('Buy more API requests on https://dashboard.decodo.com/')
+            print('last accessed link:')
+            if 'url' in payload:
+                print(payload['url'])
+            elif 'query' in payload:
+                print('https://www.amazon.com/dp/' + payload['query'])
+            else:
+                print('link N/A, look at previous links')
+
+            os._exit(1)
+
+
+        # if failed 
+        print(response.text)
+        fails+=1
+        print('REQUEST FAILED, TRYING AGAIN')
+
+
+
 
 def iterate_category(args):
     
@@ -86,30 +136,34 @@ def iterate_category(args):
     link = 'https://www.amazon.com/s?i=' + str(args[0])+ '&s=exact-aware-popularity-rank&page=' + str(args[1])
     print(link)
     
-    payload = {
+    out = []
+
+    response = post_safe(
+        payload = {
         "target": "amazon",
         "url": link,
         "parse": True
-    }
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json"
-    }
-    print('processing', args[0], 'page', args[1], '...')
-    response = requests.post(url, json=payload, headers=headers, auth=(username,password))
-    print(args[0], 'case', args[1], end='\t')
-    if(response.status_code!= 200):
-        print('FAILED.\t LINKS NOT SAVED.')
-        return [] # returns empty list if failed
-    print('DONE')
-    #print(response.text)
+        },
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json"
+        },
+        message= 'processing '+ str(args[0])+ ' page '+ str(args[1])+ ' ...'
+    )
+    if response is None:
+        return out
+
     info = json.loads(response.text)['results'][0]['content']['results']['results']
     if(len(info) == 0):
         return []
-    info = [j for sublist in dict(info).values() for j in sublist]
+    listings = [j for sublist in dict(info).values() for j in sublist]
     
+    for listing in listings:
+        if 'price' in listing and price(listing['price']) >=1:
+            out.append(listing['asin'])
+
     
-    return [listing['asin'] for listing in info]
+    return out
 
 
 def exit_msg():
